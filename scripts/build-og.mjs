@@ -38,8 +38,8 @@ async function buildOgCard() {
   const W = 1200;
   const H = 630;
 
-  // Stacked lockup: kraken sits in the top half, wordmark in the bottom half.
-  const krakenSize = 280;
+  // Full-bleed kraken backdrop scaled to the canvas height, centered.
+  const krakenSize = H;
   const kraken = await sharp(KRAKEN_WHITE)
     .resize(krakenSize, krakenSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
@@ -57,9 +57,9 @@ async function buildOgCard() {
   const wordmarkMeta = await sharp(wordmark).metadata();
 
   const krakenLeft = Math.round((W - krakenSize) / 2);
-  const krakenTop = Math.round((H / 2 - krakenSize) / 2);
+  const krakenTop = Math.round((H - krakenSize) / 2);
   const wordmarkLeft = Math.round((W - wordmarkMeta.width) / 2);
-  const wordmarkTop = Math.round(H / 2 + (H / 2 - wordmarkMeta.height) / 2);
+  const wordmarkTop = Math.round((H - wordmarkMeta.height) / 2);
 
   const canvas = sharp({
     create: {
