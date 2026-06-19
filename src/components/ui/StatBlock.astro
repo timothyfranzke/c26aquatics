@@ -1,0 +1,59 @@
+---
+/**
+ * Big numeric stat. Condensed, oversized figure over an uppercase label.
+ * `accent` chooses the value color token; `tone` switches contrast for dark backgrounds.
+ */
+interface Props {
+  value: string | number;
+  label: string;
+  accent?: 'navy' | 'teal' | 'orange';
+  tone?: 'light' | 'dark';
+  align?: 'left' | 'center' | 'right';
+}
+
+const { value, label, accent, tone = 'light', align = 'center' } = Astro.props;
+const resolvedAccent = accent ?? (tone === 'dark' ? 'teal' : 'navy');
+const classList = [
+  'c26-stat',
+  `c26-stat--accent-${resolvedAccent}`,
+  `c26-stat--tone-${tone}`,
+  `c26-stat--align-${align}`,
+].join(' ');
+---
+<div class={classList}>
+  <div class="c26-stat__value">{value}</div>
+  <div class="c26-stat__label">{label}</div>
+</div>
+
+<style>
+  .c26-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .c26-stat--align-left { text-align: left; align-items: flex-start; }
+  .c26-stat--align-center { text-align: center; align-items: center; }
+  .c26-stat--align-right { text-align: right; align-items: flex-end; }
+
+  .c26-stat__value {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 0.9;
+    letter-spacing: var(--ls-tight);
+  }
+  .c26-stat--accent-navy .c26-stat__value { color: var(--navy-700); }
+  .c26-stat--accent-orange .c26-stat__value { color: var(--orange-500); }
+  .c26-stat--accent-teal .c26-stat__value { color: var(--teal-500); }
+  .c26-stat--tone-dark.c26-stat--accent-teal .c26-stat__value { color: var(--teal-400); }
+
+  .c26-stat__label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    color: var(--text-muted);
+  }
+  .c26-stat--tone-dark .c26-stat__label { color: var(--text-on-dark-muted); }
+</style>

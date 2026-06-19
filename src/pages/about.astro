@@ -1,0 +1,326 @@
+---
+import { Image } from 'astro:assets';
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
+import CTABand from '@components/sections/CTABand.astro';
+import Card from '@components/ui/Card.astro';
+import Badge from '@components/ui/Badge.astro';
+import krakenOrange from '@assets/brand/kraken-orange.png';
+import { site } from '@data/site';
+import { serviceArea } from '@data/serviceArea';
+import {
+  sportsOrganizationSchema,
+  aboutPageSchema,
+  jsonLd,
+} from '@lib/schemas';
+
+const orgSchema = sportsOrganizationSchema();
+const aboutSchema = aboutPageSchema();
+
+const cityNames = serviceArea.map((c) => c.name);
+const cityListProse =
+  cityNames.length > 1
+    ? `${cityNames.slice(0, -1).join(', ')}, and ${cityNames[cityNames.length - 1]}`
+    : cityNames[0];
+
+const pillars = [
+  {
+    title: 'Craft',
+    body:
+      'Technique-first coaching. We obsess over body line, breath, and pace so every stroke gets a little cleaner — week over week.',
+  },
+  {
+    title: 'Consistency',
+    body:
+      'Year-round, indoor pool. Same coaches, same standards. Swimmers improve when training doesn’t pause for the calendar.',
+  },
+  {
+    title: 'Care',
+    body:
+      'USA Swimming–registered, SafeSport-certified, and built around real relationships between coaches, swimmers, and families.',
+  },
+];
+---
+<Base
+  title="About C26 Aquatics | KC Metro Swim Team"
+  description="C26 Aquatics is a Kansas City swim community built on craft, consistency, and care. Meet the team, philosophy, and KC-metro communities we serve."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(aboutSchema)}></script>
+  </Fragment>
+
+  <Header />
+  <main>
+    <Hero
+      variant="page"
+      eyebrow="About"
+      title="Our <span class='hero-accent'>story</span>"
+      subtitle="A Kansas City swim community built on craft, consistency, and care."
+    />
+
+    <section class="story" aria-labelledby="story-title">
+      <div class="container story__inner">
+        <div class="story__media" aria-hidden="true">
+          <Image
+            src={krakenOrange}
+            alt=""
+            class="story__image"
+            widths={[360, 540, 720]}
+            sizes="(min-width: 900px) 440px, 80vw"
+          />
+        </div>
+        <Card as="article" padding="lg" tone="surface" class="story__card">
+          <p class="story__eyebrow">Who we are</p>
+          <h2 id="story-title" class="story__heading">A team built around the long game.</h2>
+          {/* TODO: replace with real story */}
+          <div class="story__prose">
+            <p>
+              C26 Aquatics was founded to give Kansas City–area swimmers a real
+              home — a place where competitive athletes and brand-new beginners
+              share the same pool, the same coaching staff, and the same culture
+              of careful, repeatable improvement.
+            </p>
+            <p>
+              We coach the long game. Bronze through Platinum, parent-and-tot
+              through adult — every track is led by a USA Swimming–registered,
+              SafeSport-certified coach who cares about technique first and
+              outcomes second.
+            </p>
+            <p>
+              Across the KC metro, families trust us because we don’t chase
+              shortcuts. We just keep showing up, in the same pool, with the
+              same standards — every week, all year.
+            </p>
+          </div>
+        </Card>
+      </div>
+    </section>
+
+    <section class="pillars" aria-labelledby="pillars-title">
+      <div class="container">
+        <header class="pillars__head">
+          <p class="pillars__eyebrow">Our philosophy</p>
+          <h2 id="pillars-title" class="pillars__heading">
+            Three things we never compromise on.
+          </h2>
+        </header>
+        <div class="pillars__grid">
+          {pillars.map((pillar) => (
+            <Card as="article" padding="lg" tone="surface" class="pillar">
+              <span class="pillar__index" aria-hidden="true">{pillar.title.charAt(0)}</span>
+              <h3 class="pillar__title">{pillar.title}</h3>
+              <p class="pillar__body">{pillar.body}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="service-area" class="service-area" aria-labelledby="service-area-title">
+      <div class="container">
+        <header class="service-area__head">
+          <p class="service-area__eyebrow">Service area</p>
+          <h2 id="service-area-title" class="service-area__heading">
+            Proudly serving the Kansas City metro.
+          </h2>
+          <p class="service-area__prose">
+            Swimmers travel to C26 Aquatics from across Johnson County and the
+            wider KC metro. We regularly coach families from {cityListProse} —
+            and welcome anyone within driving distance of our indoor pool.
+          </p>
+        </header>
+        <ul class="service-area__cities" aria-label="Communities served">
+          {serviceArea.map((city) => (
+            <li>
+              <Badge tone="navy" size="md">
+                {city.name}, {city.state}
+              </Badge>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <TestimonialsBand
+      featuredOnly={false}
+      eyebrow="In their words"
+      heading="What KC families say"
+    />
+
+    <CTABand
+      title="Come <span class='hero-accent accent'>swim with us</span>"
+      primaryCta={{ label: 'Book a lesson', href: site.booking.lessons, external: true }}
+      secondaryCta={{ label: 'Explore the team', href: '/team' }}
+    />
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<style>
+  .story {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .story__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .story__media {
+    background: linear-gradient(135deg, var(--navy-700) 0%, var(--navy-900) 100%);
+    border-radius: var(--r-lg);
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .story__image {
+    width: 70%;
+    max-width: 360px;
+    height: auto;
+    object-fit: contain;
+  }
+  :global(.story__card) {
+    gap: var(--space-4);
+  }
+  .story__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0;
+  }
+  .story__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .story__prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+  .story__prose p { margin: 0; }
+
+  .pillars {
+    background: var(--surface-alt);
+    padding: var(--section-y) 0;
+  }
+  .pillars__head {
+    max-width: 720px;
+    margin-bottom: var(--space-10);
+  }
+  .pillars__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .pillars__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .pillars__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+  :global(.pillar) {
+    gap: var(--space-3);
+  }
+  .pillar__index {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: 56px;
+    line-height: 0.9;
+    color: var(--orange-500);
+  }
+  .pillar__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 26px;
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .pillar__body {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  .service-area {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .service-area__head {
+    max-width: 760px;
+    margin-bottom: var(--space-8);
+  }
+  .service-area__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .service-area__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .service-area__prose {
+    margin: var(--space-4) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+  .service-area__cities {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  @media (max-width: 900px) {
+    .story__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+    .pillars__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

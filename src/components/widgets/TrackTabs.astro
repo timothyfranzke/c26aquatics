@@ -1,0 +1,322 @@
+---
+/**
+ * TrackTabs — accessible, JS-toggled tabs used on /team and /swim-lessons.
+ *
+ * Crawlability: every tab panel is rendered in the DOM at build time. JS only
+ * toggles `hidden`/`aria-hidden`/`aria-selected` and tabindex — content is
+ * always present for crawlers and JS-disabled visitors.
+ *
+ * Keyboard: ArrowLeft/Right move focus through tabs, Home/End jump to ends,
+ * Enter/Space activates. Roving tabindex (only the active tab is tabbable).
+ *
+ * Pure UI primitive — callers shape collection entries into the `tracks` prop;
+ * the widget never touches `astro:content`.
+ */
+interface MetaItem {
+  label: string;
+  value: string;
+}
+
+interface Track {
+  slug: string;
+  name: string;
+  eyebrowText?: string;
+  bodyHtml: string;
+  meta?: MetaItem[];
+}
+
+interface Props {
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  subtitle?: string;
+  tracks: Track[];
+}
+
+const { id, eyebrow, heading, subtitle, tracks } = Astro.props;
+const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
+---
+<section class="tracks" aria-labelledby={`${safeId}-title`}>
+  <div class="container">
+    <header class="tracks__head">
+      {eyebrow && <p class="tracks__eyebrow">{eyebrow}</p>}
+      <h2 id={`${safeId}-title`} class="tracks__heading">{heading}</h2>
+      {subtitle && <p class="tracks__subtitle">{subtitle}</p>}
+    </header>
+
+    <div class="tracks__widget" data-track-tabs id={safeId}>
+      <div role="tablist" aria-label={heading} class="tracks__tablist">
+        {tracks.map((track, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`${safeId}-tab-${track.slug}`}
+            class="tracks__tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`${safeId}-panel-${track.slug}`}
+            tabindex={i === 0 ? 0 : -1}
+            data-tab={track.slug}
+          >
+            {track.eyebrowText && (
+              <span class="tracks__tab-eyebrow">{track.eyebrowText}</span>
+            )}
+            <span class="tracks__tab-name">{track.name}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="tracks__panels">
+        {tracks.map((track, i) => (
+          <div
+            role="tabpanel"
+            id={`${safeId}-panel-${track.slug}`}
+            aria-labelledby={`${safeId}-tab-${track.slug}`}
+            class="tracks__panel"
+            hidden={i !== 0}
+            aria-hidden={i !== 0 ? 'true' : 'false'}
+            tabindex="0"
+            data-panel={track.slug}
+          >
+            {track.meta && track.meta.length > 0 && (
+              <dl class="tracks__meta">
+                {track.meta.map((m) => (
+                  <div class="tracks__meta-item">
+                    <dt>{m.label}</dt>
+                    <dd>{m.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <div class="tracks__body" set:html={track.bodyHtml}></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* eslint-disable */
+  function initTrackTabs(root: HTMLElement) {
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>('[role="tabpanel"]'),
+    );
+
+    function activate(slug: string, focusTab: boolean) {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.tab === slug;
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.setAttribute('tabindex', isActive ? '0' : '-1');
+        if (isActive && focusTab) tab.focus();
+      });
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.panel === slug;
+        panel.hidden = !isActive;
+        panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        const slug = tab.dataset.tab;
+        if (slug) activate(slug, false);
+      });
+
+      tab.addEventListener('keydown', (event: KeyboardEvent) => {
+        let nextIndex: number | null = null;
+        switch (event.key) {
+          case 'ArrowRight':
+            nextIndex = (index + 1) % tabs.length;
+            break;
+          case 'ArrowLeft':
+            nextIndex = (index - 1 + tabs.length) % tabs.length;
+            break;
+          case 'Home':
+            nextIndex = 0;
+            break;
+          case 'End':
+            nextIndex = tabs.length - 1;
+            break;
+          case 'Enter':
+          case ' ': {
+            const slug = tab.dataset.tab;
+            if (slug) activate(slug, false);
+            event.preventDefault();
+            return;
+          }
+          default:
+            return;
+        }
+        event.preventDefault();
+        if (nextIndex !== null) {
+          const slug = tabs[nextIndex].dataset.tab;
+          if (slug) activate(slug, true);
+        }
+      });
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-track-tabs]')
+    .forEach((el) => initTrackTabs(el));
+</script>
+
+<style>
+  .tracks {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .tracks__head {
+    max-width: 720px;
+    margin-bottom: var(--space-10);
+  }
+  .tracks__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .tracks__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .tracks__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  .tracks__tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-8);
+  }
+
+  .tracks__tab {
+    background: transparent;
+    border: 0;
+    padding: var(--space-4) var(--space-5);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    transition:
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+  .tracks__tab:hover {
+    color: var(--navy-700);
+  }
+  .tracks__tab[aria-selected='true'] {
+    color: var(--navy-700);
+    border-bottom-color: var(--orange-500);
+  }
+  .tracks__tab-eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 11px;
+    letter-spacing: var(--ls-eyebrow);
+    color: var(--teal-600);
+  }
+  .tracks__tab-name {
+    font-size: 18px;
+    line-height: 1.1;
+  }
+
+  .tracks__panel {
+    background: var(--surface-alt);
+    border-radius: var(--r-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .tracks__panel[hidden] { display: none; }
+  .tracks__panel:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .tracks__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin: 0;
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface);
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+  }
+  .tracks__meta-item {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+  .tracks__meta dt {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+    margin: 0;
+  }
+  .tracks__meta dd {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-strong);
+    font-weight: var(--fw-medium);
+  }
+
+  .tracks__body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+  .tracks__body :global(h2),
+  .tracks__body :global(h3),
+  .tracks__body :global(h4) {
+    font-family: var(--font-display);
+    color: var(--navy-700);
+    text-transform: uppercase;
+    margin: var(--space-5) 0 var(--space-2);
+  }
+  .tracks__body :global(h2) { font-size: 26px; }
+  .tracks__body :global(h3) { font-size: 22px; }
+  .tracks__body :global(h4) { font-size: 18px; }
+  .tracks__body :global(p) { margin: 0 0 var(--space-3); }
+  .tracks__body :global(ul),
+  .tracks__body :global(ol) {
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-5);
+  }
+  .tracks__body :global(li) { margin-bottom: var(--space-2); }
+  .tracks__body :global(strong) { color: var(--text-strong); }
+
+  @media (max-width: 600px) {
+    .tracks__panel { padding: var(--space-5); }
+    .tracks__tab { padding: var(--space-3) var(--space-4); }
+    .tracks__tab-name { font-size: 16px; }
+  }
+</style>

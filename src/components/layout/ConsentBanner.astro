@@ -1,0 +1,128 @@
+---
+import { site } from '@data/site';
+import Button from '@components/ui/Button.astro';
+
+const ga4Id = site.ga4MeasurementId;
+const ga4Enabled = ga4Id && ga4Id !== 'G-XXXXXXXXXX';
+---
+<div
+  id="c26-consent"
+  class="c26-consent"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie consent"
+  hidden
+>
+  <div class="c26-consent__inner">
+    <p class="c26-consent__text">
+      We use a single analytics cookie to understand how visitors use this site.
+      {/* TODO: replace `#` with real privacy policy URL once published */}
+      <a href="#" class="c26-consent__link">Read our privacy notice.</a>
+    </p>
+    <div class="c26-consent__actions">
+      <Button id="c26-consent-decline" variant="outline-light" size="sm">Decline</Button>
+      <Button id="c26-consent-accept" variant="primary" size="sm">Accept</Button>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ ga4Id, ga4Enabled }}>
+  const STORAGE_KEY = 'c26-consent';
+  const banner = document.getElementById('c26-consent');
+  const acceptBtn = document.getElementById('c26-consent-accept');
+  const declineBtn = document.getElementById('c26-consent-decline');
+
+  function injectGA4() {
+    if (!ga4Enabled || !ga4Id) return;
+    if (document.querySelector('script[data-c26-ga4]')) return;
+
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`;
+    s.setAttribute('data-c26-ga4', 'true');
+    document.head.appendChild(s);
+
+    const inline = document.createElement('script');
+    inline.setAttribute('data-c26-ga4-config', 'true');
+    inline.text =
+      `window.dataLayer = window.dataLayer || [];` +
+      `function gtag(){dataLayer.push(arguments);}` +
+      `gtag('js', new Date());` +
+      `gtag('config', '${ga4Id}');`;
+    document.head.appendChild(inline);
+  }
+
+  function showBanner() {
+    if (banner) banner.hidden = false;
+  }
+  function hideBanner() {
+    if (banner) banner.hidden = true;
+  }
+
+  const stored = (() => {
+    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+  })();
+
+  if (stored === 'granted') {
+    injectGA4();
+  } else if (stored === 'denied') {
+    // explicit decline; stay silent
+  } else {
+    showBanner();
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    try { localStorage.setItem(STORAGE_KEY, 'granted'); } catch {}
+    window.dispatchEvent(new CustomEvent('consent:granted'));
+    injectGA4();
+    hideBanner();
+  });
+
+  declineBtn?.addEventListener('click', () => {
+    try { localStorage.setItem(STORAGE_KEY, 'denied'); } catch {}
+    window.dispatchEvent(new CustomEvent('consent:denied'));
+    hideBanner();
+  });
+</script>
+
+<style>
+  .c26-consent {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    background: var(--navy-900);
+    color: var(--text-on-dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -8px 24px rgba(11, 31, 43, 0.3);
+  }
+  .c26-consent[hidden] { display: none; }
+
+  .c26-consent__inner {
+    width: min(var(--container), 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding: var(--space-4) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+  }
+  .c26-consent__text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-on-dark-muted);
+    max-width: 64ch;
+  }
+  .c26-consent__link {
+    color: var(--teal-400);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .c26-consent__actions {
+    display: inline-flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>

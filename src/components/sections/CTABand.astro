@@ -1,0 +1,133 @@
+---
+/**
+ * CTABand — full-bleed final-call section.
+ * `title` is rendered with `set:html` so accent spans (e.g. orange highlight words) work.
+ */
+import Button from '@components/ui/Button.astro';
+
+interface CTA {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  primaryCta: CTA;
+  secondaryCta?: CTA;
+  tone?: 'navy' | 'orange' | 'gradient';
+}
+
+const {
+  eyebrow,
+  title,
+  subtitle,
+  primaryCta,
+  secondaryCta,
+  tone = 'navy',
+} = Astro.props;
+---
+<section class={`cta-band cta-band--${tone}`} aria-labelledby="cta-band-title">
+  <div class="container cta-band__inner">
+    {eyebrow && <p class="cta-band__eyebrow">{eyebrow}</p>}
+    <h2 id="cta-band-title" class="cta-band__title" set:html={title}></h2>
+    {subtitle && <p class="cta-band__subtitle">{subtitle}</p>}
+    <div class="cta-band__ctas">
+      <Button
+        href={primaryCta.href}
+        external={primaryCta.external}
+        variant={tone === 'orange' ? 'dark' : 'primary'}
+        size="lg"
+      >
+        {primaryCta.label}
+      </Button>
+      {secondaryCta && (
+        <Button
+          href={secondaryCta.href}
+          variant={tone === 'orange' ? 'outline' : 'outline-light'}
+          size="lg"
+        >
+          {secondaryCta.label}
+        </Button>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    padding: var(--section-y) 0;
+    text-align: center;
+  }
+  .cta-band--navy {
+    background: var(--navy-900);
+    color: var(--text-on-dark);
+  }
+  .cta-band--orange {
+    background: var(--orange-500);
+    color: var(--action-ink);
+  }
+  .cta-band--gradient {
+    background: linear-gradient(135deg, var(--navy-700) 0%, var(--teal-700) 100%);
+    color: var(--text-on-dark);
+  }
+
+  .cta-band__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .cta-band__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    margin: 0;
+  }
+  .cta-band--navy .cta-band__eyebrow { color: var(--teal-400); }
+  .cta-band--orange .cta-band__eyebrow { color: var(--action-ink); }
+  .cta-band--gradient .cta-band__eyebrow { color: var(--teal-200); }
+
+  .cta-band__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 0.95;
+    letter-spacing: var(--ls-tight);
+    margin: 0;
+  }
+  .cta-band--navy .cta-band__title { color: var(--white); }
+  .cta-band--orange .cta-band__title { color: var(--action-ink); }
+  .cta-band--gradient .cta-band__title { color: var(--white); }
+  .cta-band__title :global(.accent),
+  .cta-band__title :global(.cta-accent) {
+    color: var(--orange-500);
+  }
+  .cta-band--orange .cta-band__title :global(.accent),
+  .cta-band--orange .cta-band__title :global(.cta-accent) {
+    color: var(--navy-700);
+  }
+
+  .cta-band__subtitle {
+    font-size: 19px;
+    line-height: 1.5;
+    max-width: 640px;
+    margin: 0;
+  }
+  .cta-band--navy .cta-band__subtitle { color: rgba(255, 255, 255, 0.8); }
+  .cta-band--gradient .cta-band__subtitle { color: rgba(255, 255, 255, 0.85); }
+
+  .cta-band__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+/**
+ * ServiceAreaBand — navy band listing KC-metro cities as readable text chips.
+ * Cities must render as plain DOM text (not images) for local SEO.
+ */
+import Badge from '@components/ui/Badge.astro';
+import { serviceArea } from '@data/serviceArea';
+
+interface Props {
+  heading?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  heading = 'Proudly serving the KC metro',
+  subtitle = 'One pool, one staff — drawing swimmers from across the Kansas City suburbs.',
+  ctaLabel = 'See where we serve',
+  ctaHref = '/about#service-area',
+} = Astro.props;
+---
+<section class="service" aria-labelledby="service-title">
+  <div class="container service__inner">
+    <header class="service__head">
+      <h2 id="service-title" class="service__heading">{heading}</h2>
+      {subtitle && <p class="service__subtitle">{subtitle}</p>}
+    </header>
+
+    <ul class="service__cities" aria-label="Communities served">
+      {serviceArea.map((city) => (
+        <li>
+          <Badge tone="outline-light" size="md">
+            {city.name}, {city.state}
+          </Badge>
+        </li>
+      ))}
+    </ul>
+
+    <a href={ctaHref} class="service__cta">
+      {ctaLabel}
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .service {
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+    padding: var(--section-y-tight) 0;
+  }
+  .service__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .service__head {
+    max-width: 760px;
+  }
+  .service__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(26px, 3.4vw, 38px);
+    color: var(--white);
+    margin: 0;
+  }
+  .service__subtitle {
+    color: var(--text-on-dark-muted);
+    margin: var(--space-3) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .service__cities {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .service__cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: var(--teal-400);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+  .service__cta:hover {
+    color: var(--white);
+    border-color: var(--teal-400);
+  }
+</style>

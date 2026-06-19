@@ -1,0 +1,227 @@
+---
+/**
+ * CoachesGrid — responsive grid of coach cards.
+ * Fetches the `coaches` collection, sorts by `order`, slices to `limit`.
+ * Each card has an id matching the entry slug so `/coaches#robbie-bruce` works.
+ *
+ * Headshots are runtime path strings (under /public), not bundled assets — we
+ * render with a plain <img> with explicit width/height to prevent CLS.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Card from '@components/ui/Card.astro';
+import Badge from '@components/ui/Badge.astro';
+
+interface Props {
+  limit?: number;
+  eyebrow?: string;
+  heading?: string;
+  subtitle?: string;
+  tone?: 'light' | 'dark';
+}
+
+const {
+  limit,
+  eyebrow = 'The staff',
+  heading = 'Coaches & bios',
+  subtitle,
+  tone = 'dark',
+} = Astro.props;
+
+type CoachEntry = CollectionEntry<'coaches'>;
+const all = await getCollection('coaches');
+const sorted = all.sort(
+  (a: CoachEntry, b: CoachEntry) => a.data.order - b.data.order,
+);
+const coaches = typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
+
+const rendered = await Promise.all(
+  coaches.map(async (coach: CoachEntry) => {
+    const { Content } = await coach.render();
+    return { coach, Content };
+  }),
+);
+---
+<section class={`coaches coaches--${tone}`} aria-labelledby="coaches-title">
+  <div class="container">
+    <header class="coaches__head">
+      {eyebrow && <p class="coaches__eyebrow">{eyebrow}</p>}
+      <h2 id="coaches-title" class="coaches__heading">{heading}</h2>
+      {subtitle && <p class="coaches__subtitle">{subtitle}</p>}
+    </header>
+
+    <div class="coaches__grid">
+      {rendered.map(({ coach, Content }) => (
+        <article id={coach.slug} class="coach-card">
+          <div class="coach-card__media">
+            <img
+              src={coach.data.headshot}
+              alt={`${coach.data.name}, ${coach.data.role}`}
+              width="600"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="coach-card__body">
+            <h3 class="coach-card__name">{coach.data.name}</h3>
+            <div class="coach-card__role">{coach.data.role}</div>
+            <div class="coach-card__badges">
+              {coach.data.usaSwimmingMember && (
+                <Badge tone={tone === 'dark' ? 'outline-light' : 'teal'} size="sm">
+                  USA Swimming
+                </Badge>
+              )}
+              {coach.data.safeSportCertified && (
+                <Badge tone={tone === 'dark' ? 'outline-light' : 'orange'} size="sm">
+                  SafeSport Certified
+                </Badge>
+              )}
+              {coach.data.credentials.slice(0, 2).map((credential) => (
+                <Badge tone={tone === 'dark' ? 'outline-light' : 'neutral'} size="sm">
+                  {credential}
+                </Badge>
+              ))}
+            </div>
+            <div class="coach-card__bio">
+              <Content />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .coaches {
+    padding: var(--section-y) 0;
+  }
+  .coaches--dark {
+    background: var(--navy-900);
+    color: var(--text-on-dark);
+  }
+  .coaches--light {
+    background: var(--surface);
+    color: var(--text-body);
+  }
+
+  .coaches__head {
+    max-width: 720px;
+    margin-bottom: var(--space-10);
+  }
+  .coaches__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    margin: 0 0 var(--space-2);
+  }
+  .coaches--dark .coaches__eyebrow { color: var(--teal-400); }
+  .coaches--light .coaches__eyebrow { color: var(--teal-600); }
+
+  .coaches__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    margin: 0;
+  }
+  .coaches--dark .coaches__heading { color: var(--white); }
+  .coaches--light .coaches__heading { color: var(--navy-700); }
+
+  .coaches__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+  .coaches--dark .coaches__subtitle { color: var(--text-on-dark-muted); }
+
+  .coaches__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .coach-card {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    scroll-margin-top: 96px;
+  }
+  .coaches--dark .coach-card {
+    background: var(--navy-800);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .coach-card__media {
+    aspect-ratio: 1 / 1;
+    background: var(--mist);
+    overflow: hidden;
+  }
+  .coaches--dark .coach-card__media {
+    background: var(--navy-700);
+  }
+  .coach-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .coach-card__body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .coach-card__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 24px;
+    margin: 0;
+  }
+  .coaches--dark .coach-card__name { color: var(--white); }
+  .coaches--light .coach-card__name { color: var(--navy-700); }
+
+  .coach-card__role {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 13px;
+  }
+  .coaches--dark .coach-card__role { color: var(--teal-400); }
+  .coaches--light .coach-card__role { color: var(--teal-700); }
+
+  .coach-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .coach-card__bio {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .coaches--dark .coach-card__bio { color: var(--text-on-dark-muted); }
+  .coaches--light .coach-card__bio { color: var(--text-body); }
+  .coach-card__bio :global(p) {
+    margin: 0 0 var(--space-3);
+  }
+  .coach-card__bio :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .coaches__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .coaches__grid { grid-template-columns: 1fr; }
+  }
+</style>

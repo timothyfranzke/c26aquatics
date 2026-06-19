@@ -1,0 +1,267 @@
+---
+import { Image } from 'astro:assets';
+import krakenWhite from '@assets/brand/kraken-white.png';
+import { footerLinks } from '@data/nav';
+import { site } from '@data/site';
+import { serviceArea } from '@data/serviceArea';
+
+const year = new Date().getFullYear();
+const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
+---
+<footer class="c26-footer">
+  <div class="c26-footer__inner">
+    <div class="c26-footer__col c26-footer__col--brand">
+      <a href="/" class="c26-footer__brand" aria-label={`${site.name} home`}>
+        <Image
+          src={krakenWhite}
+          alt=""
+          class="c26-footer__kraken"
+          width={76}
+          height={76}
+          densities={[1, 2]}
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="c26-footer__wordmark">
+          <span class="c26-footer__wordmark-main">
+            C<span class="c26-footer__wordmark-num">26</span>
+          </span>
+          <span class="c26-footer__wordmark-sub">AQUATICS</span>
+        </span>
+      </a>
+      <p class="c26-footer__tagline">{site.description}</p>
+    </div>
+
+    <div class="c26-footer__col">
+      <h2 class="c26-footer__heading">Site</h2>
+      <ul class="c26-footer__list">
+        {footerLinks.map((link) => (
+          <li><a href={link.href} class="c26-footer__link">{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="c26-footer__col">
+      <h2 class="c26-footer__heading">Contact</h2>
+      <address class="c26-footer__address">
+        <a href={`mailto:${site.contact.email}`} class="c26-footer__link">{site.contact.email}</a>
+        <a href={`tel:${site.contact.phone}`} class="c26-footer__link">{site.contact.phoneDisplay}</a>
+        <span class="c26-footer__city-tag">
+          {site.address.addressLocality}, {site.address.addressRegion}
+        </span>
+      </address>
+      <div class="c26-footer__social" aria-label="Social media">
+        <a
+          href={site.social.instagram}
+          class="c26-footer__social-link"
+          aria-label="C26 Aquatics on Instagram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8" fill="none" />
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" fill="none" />
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+          </svg>
+        </a>
+        <a
+          href={site.social.facebook}
+          class="c26-footer__social-link"
+          aria-label="C26 Aquatics on Facebook"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path
+              d="M13.5 21v-7h2.4l.4-3h-2.8V9.2c0-.9.3-1.5 1.6-1.5h1.3V5.1C16.1 5 15.2 5 14.4 5c-2.3 0-3.9 1.4-3.9 4v2H8v3h2.5v7h3z"
+              fill="currentColor"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="c26-footer__col">
+      <h2 class="c26-footer__heading">
+        <a href="/about#service-area" class="c26-footer__heading-link">Service area</a>
+      </h2>
+      <p class="c26-footer__cities">{cityList}</p>
+    </div>
+  </div>
+
+  <div class="c26-footer__bottom">
+    <div class="c26-footer__bottom-inner">
+      <span class="c26-footer__copy">
+        © {year} {site.name} · Kansas City, {site.address.addressRegion}
+      </span>
+      <span class="c26-footer__legal">
+        <a href={site.safeSportUrl} class="c26-footer__link" target="_blank" rel="noopener noreferrer">
+          U.S. Center for SafeSport
+        </a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .c26-footer {
+    background: var(--surface-darker);
+    color: var(--text-on-dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .c26-footer__inner {
+    width: min(var(--container), 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding: var(--space-16) 0 var(--space-10);
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.2fr 1.4fr;
+    gap: var(--space-10);
+  }
+
+  .c26-footer__col--brand { max-width: 320px; }
+
+  .c26-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-on-dark);
+  }
+  .c26-footer__kraken {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+  }
+  .c26-footer__wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+  .c26-footer__wordmark-main {
+    font-weight: var(--fw-black);
+    font-size: 24px;
+    letter-spacing: var(--ls-tight);
+  }
+  .c26-footer__wordmark-num { color: var(--orange-500); }
+  .c26-footer__wordmark-sub {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--teal-400);
+  }
+  .c26-footer__tagline {
+    margin-top: var(--space-4);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+  }
+
+  .c26-footer__heading {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px;
+    color: var(--teal-400);
+    margin-bottom: var(--space-4);
+  }
+  .c26-footer__heading-link {
+    color: inherit;
+  }
+  .c26-footer__heading-link:hover {
+    color: var(--text-on-dark);
+  }
+
+  .c26-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .c26-footer__link {
+    font-size: 15px;
+    color: #cdd9df;
+    transition: color var(--dur-base) var(--ease-out);
+  }
+  .c26-footer__link:hover {
+    color: var(--text-on-dark);
+  }
+
+  .c26-footer__address {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-style: normal;
+    font-size: 15px;
+    color: #cdd9df;
+  }
+  .c26-footer__city-tag {
+    color: var(--text-on-dark-muted);
+    font-size: 14px;
+  }
+
+  .c26-footer__social {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .c26-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-on-dark);
+    border-radius: var(--r-pill);
+    color: var(--text-on-dark);
+    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  }
+  .c26-footer__social-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--teal-400);
+    color: var(--teal-400);
+  }
+
+  .c26-footer__cities {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cdd9df;
+  }
+
+  .c26-footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .c26-footer__bottom-inner {
+    width: min(var(--container), 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding: var(--space-5) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    font-size: 13px;
+    color: var(--text-on-dark-muted);
+  }
+  .c26-footer__legal {
+    display: inline-flex;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 900px) {
+    .c26-footer__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      padding: var(--space-12) 0 var(--space-8);
+    }
+  }
+  @media (max-width: 560px) {
+    .c26-footer__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,283 @@
+---
+/**
+ * FAQAccordion — renders <details>/<summary> Q&A AND a scoped FAQPage JSON-LD.
+ *
+ * IMPORTANT (SEO): the visible DOM text and the JSON-LD `acceptedAnswer.text` must
+ * match within Google's tolerance — otherwise the FAQ rich result is suppressed.
+ * Both are derived from the same content collection entry: the visible answer
+ * uses the rendered Markdown <Content />, and the JSON-LD answer uses the same
+ * raw body run through `markdownToPlainText`.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { markdownToPlainText } from '@lib/markdown';
+
+type Surface = 'home' | 'team' | 'swim-lessons' | 'faq';
+type Category = 'team' | 'lessons' | 'logistics' | 'general';
+
+interface Props {
+  surface: Surface;
+  heading?: string;
+  eyebrow?: string;
+  subtitle?: string;
+  groupByCategory?: boolean;
+}
+
+const {
+  surface,
+  heading = 'Frequently asked questions',
+  eyebrow = 'Questions',
+  subtitle,
+  groupByCategory = false,
+} = Astro.props;
+
+type FaqEntry = CollectionEntry<'faqs'>;
+const all = await getCollection('faqs');
+const filtered = all
+  .filter((f: FaqEntry) => f.data.surfaces.includes(surface))
+  .sort((a: FaqEntry, b: FaqEntry) => a.data.order - b.data.order);
+
+// Pre-render the markdown answers once.
+const rendered = await Promise.all(
+  filtered.map(async (entry: FaqEntry) => {
+    const { Content } = await entry.render();
+    return {
+      entry,
+      Content,
+      plainText: markdownToPlainText(entry.body),
+    };
+  }),
+);
+
+// JSON-LD scoped to exactly what's visible.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: rendered.map(({ entry, plainText }) => ({
+    '@type': 'Question',
+    name: entry.data.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: plainText,
+    },
+  })),
+};
+
+const categoryLabels: Record<Category, string> = {
+  team: 'Team',
+  lessons: 'Lessons',
+  logistics: 'Logistics',
+  general: 'General',
+};
+const categoryOrder: Category[] = ['general', 'team', 'lessons', 'logistics'];
+
+const grouped: Record<Category, typeof rendered> = {
+  team: [],
+  lessons: [],
+  logistics: [],
+  general: [],
+};
+if (groupByCategory) {
+  for (const item of rendered) {
+    grouped[item.entry.data.category].push(item);
+  }
+}
+---
+<section class="faq" aria-labelledby="faq-title">
+  <div class="container faq__inner">
+    <header class="faq__head">
+      {eyebrow && <p class="faq__eyebrow">{eyebrow}</p>}
+      <h2 id="faq-title" class="faq__heading">{heading}</h2>
+      {subtitle && <p class="faq__subtitle">{subtitle}</p>}
+    </header>
+
+    {groupByCategory ? (
+      <div class="faq__groups">
+        {categoryOrder
+          .filter((cat) => grouped[cat].length > 0)
+          .map((cat) => (
+            <div class="faq__group">
+              <h3 class="faq__group-title">{categoryLabels[cat]}</h3>
+              <div class="faq__list">
+                {grouped[cat].map(({ entry, Content }) => (
+                  <details class="faq__item">
+                    <summary class="faq__summary">
+                      <span class="faq__question">{entry.data.question}</span>
+                      <span class="faq__chevron" aria-hidden="true"></span>
+                    </summary>
+                    <div class="faq__answer">
+                      <Content />
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))}
+      </div>
+    ) : (
+      <div class="faq__list">
+        {rendered.map(({ entry, Content }) => (
+          <details class="faq__item">
+            <summary class="faq__summary">
+              <span class="faq__question">{entry.data.question}</span>
+              <span class="faq__chevron" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <Content />
+            </div>
+          </details>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+
+<style>
+  .faq {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .faq__inner {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+  .faq__head {
+    margin-bottom: var(--space-8);
+  }
+  .faq__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .faq__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .faq__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  .faq__groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+  .faq__group-title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 22px;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--teal-500);
+    display: inline-block;
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .faq__item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    transition: box-shadow var(--dur-base) var(--ease-out);
+  }
+  .faq__item[open] {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .faq__summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 20px;
+    color: var(--navy-700);
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .faq__summary::-webkit-details-marker { display: none; }
+  .faq__summary::marker { content: ''; }
+
+  .faq__question {
+    flex: 1;
+  }
+
+  .faq__chevron {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .faq__chevron::before,
+  .faq__chevron::after {
+    content: '';
+    position: absolute;
+    background: var(--orange-500);
+    border-radius: 2px;
+  }
+  /* horizontal bar (always visible) */
+  .faq__chevron::before {
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    transform: translateY(-50%);
+  }
+  /* vertical bar — hides on [open] to form a minus */
+  .faq__chevron::after {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+  .faq__item[open] .faq__chevron::after { opacity: 0; }
+
+  .faq__answer {
+    padding: 0 var(--space-6) var(--space-6);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+  .faq__answer :global(p) { margin: 0 0 var(--space-3); }
+  .faq__answer :global(p:last-child) { margin-bottom: 0; }
+  .faq__answer :global(ul),
+  .faq__answer :global(ol) {
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-5);
+  }
+  .faq__answer :global(li) { margin-bottom: var(--space-2); }
+  .faq__answer :global(strong) { color: var(--text-strong); }
+  .faq__answer :global(a) {
+    color: var(--teal-700);
+    text-decoration: underline;
+    text-decoration-color: var(--teal-200);
+    text-underline-offset: 3px;
+  }
+</style>

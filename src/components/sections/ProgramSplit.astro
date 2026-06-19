@@ -1,0 +1,173 @@
+---
+/**
+ * ProgramSplit — home-only "decision" block.
+ * Two-column comparison of Team (competitive) vs Lessons (learn-to-swim).
+ * Stacks at mobile.
+ */
+import { Image } from 'astro:assets';
+import Card from '@components/ui/Card.astro';
+import Badge from '@components/ui/Badge.astro';
+import Button from '@components/ui/Button.astro';
+import krakenOrange from '@assets/brand/kraken-orange.png';
+import krakenTeal from '@assets/brand/kraken-teal.png';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  subtitle?: string;
+}
+
+const {
+  eyebrow = 'Find your path',
+  heading = 'Get in the water',
+  subtitle = 'Two on-ramps, one program. Pick the path that fits where your swimmer is today.',
+} = Astro.props;
+---
+<section class="split" aria-labelledby="split-title">
+  <div class="container">
+    <header class="split__head">
+      <p class="split__eyebrow">{eyebrow}</p>
+      <h2 id="split-title" class="split__heading">{heading}</h2>
+      {subtitle && <p class="split__subtitle">{subtitle}</p>}
+    </header>
+
+    <div class="split__grid">
+      <Card as="article" padding="lg" tone="surface" class="split__card">
+        <div class="split__media split__media--team">
+          <Image src={krakenOrange} alt="" class="split__media-img" widths={[280, 420]} sizes="220px" />
+        </div>
+        <Badge tone="orange" size="md">Competitive Team</Badge>
+        <h3 class="split__card-title">Race ready.</h3>
+        <p class="split__card-summary">
+          Year-round training for swimmers ready to compete — from first heat sheets to senior elite.
+        </p>
+        <ul class="split__benefits">
+          <li><Badge tone="neutral" size="sm">Bronze through Platinum</Badge></li>
+          <li><Badge tone="neutral" size="sm">USA Swimming sanctioned</Badge></li>
+          <li><Badge tone="neutral" size="sm">Career coaches</Badge></li>
+        </ul>
+        <div class="split__cta">
+          <Button href="/team" variant="primary" size="md">Explore the team</Button>
+        </div>
+      </Card>
+
+      <Card as="article" padding="lg" tone="surface" class="split__card">
+        <div class="split__media split__media--lessons">
+          <Image src={krakenTeal} alt="" class="split__media-img" widths={[280, 420]} sizes="220px" />
+        </div>
+        <Badge tone="teal" size="md">Swim Lessons</Badge>
+        <h3 class="split__card-title">Learn to swim.</h3>
+        <p class="split__card-summary">
+          Small classes for every age — from Parent &amp; Tot through teen and adult learners.
+        </p>
+        <ul class="split__benefits">
+          <li><Badge tone="neutral" size="sm">Classes of four or fewer</Badge></li>
+          <li><Badge tone="neutral" size="sm">Six month – adult</Badge></li>
+          <li><Badge tone="neutral" size="sm">Year-round indoor pool</Badge></li>
+        </ul>
+        <div class="split__cta">
+          <Button href="/swim-lessons" variant="dark" size="md">Browse lessons</Button>
+        </div>
+      </Card>
+    </div>
+  </div>
+</section>
+
+<style>
+  .split {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .split__head {
+    max-width: 720px;
+    margin-bottom: var(--space-10);
+  }
+  .split__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .split__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .split__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 18px;
+    color: var(--text-body);
+    line-height: 1.55;
+  }
+
+  .split__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  :global(.split__card) {
+    gap: var(--space-4);
+  }
+
+  .split__media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+  }
+  .split__media--team {
+    background: linear-gradient(135deg, var(--orange-100) 0%, var(--orange-200) 100%);
+  }
+  .split__media--lessons {
+    background: linear-gradient(135deg, var(--teal-100) 0%, var(--teal-200) 100%);
+  }
+  .split__media-img {
+    width: 60%;
+    max-width: 220px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .split__card-title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    font-size: 32px;
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .split__card-summary {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0;
+  }
+  .split__benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .split__cta {
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 800px) {
+    .split__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

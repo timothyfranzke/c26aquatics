@@ -1,0 +1,63 @@
+---
+/**
+ * Small label chip — stat units, location tags, eyebrow markers.
+ */
+interface Props {
+  tone?: 'navy' | 'teal' | 'orange' | 'neutral' | 'outline' | 'outline-light';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { tone = 'neutral', size = 'md', class: className } = Astro.props;
+const classList = ['c26-badge', `c26-badge--${tone}`, `c26-badge--${size}`, className ?? '']
+  .filter(Boolean)
+  .join(' ');
+---
+<span class={classList}>
+  <slot />
+</span>
+
+<style>
+  .c26-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .c26-badge--sm { font-size: 11px; padding: 3px 9px; }
+  .c26-badge--md { font-size: 12px; padding: 5px 12px; }
+
+  .c26-badge--neutral {
+    background: var(--surface-inset);
+    color: var(--text-body);
+    border-color: var(--border);
+  }
+  .c26-badge--navy {
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+  }
+  .c26-badge--teal {
+    background: var(--teal-100);
+    color: var(--teal-700);
+  }
+  .c26-badge--orange {
+    background: var(--orange-100);
+    color: var(--orange-700);
+  }
+  .c26-badge--outline {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border-strong);
+  }
+  .c26-badge--outline-light {
+    background: transparent;
+    color: var(--text-on-dark-muted);
+    border-color: var(--border-on-dark);
+  }
+</style>

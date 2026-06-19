@@ -1,0 +1,93 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import ProgramSplit from '@components/sections/ProgramSplit.astro';
+import CoachesGrid from '@components/sections/CoachesGrid.astro';
+import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
+import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
+import FAQAccordion from '@components/sections/FAQAccordion.astro';
+import CTABand from '@components/sections/CTABand.astro';
+import { site } from '@data/site';
+import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+
+const orgSchema = sportsOrganizationSchema();
+---
+<Base
+  title="C26 Aquatics — Competitive Swim Team & Lessons in Kansas City"
+  description="C26 Aquatics is a Kansas City–metro competitive swim team and learn-to-swim program. USA Swimming–registered training groups and lessons for every age."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+  </Fragment>
+
+  <Header />
+  <main>
+    <Hero
+      variant="home"
+      eyebrow="C26 Aquatics"
+      title="Become a <span class='hero-accent'>stronger</span> swimmer"
+      subtitle="Competitive team training and learn-to-swim lessons in the Kansas City metro."
+      primaryCta={{ label: 'Explore the team', href: '/team' }}
+      secondaryCta={{ label: 'Swim lessons', href: '/swim-lessons' }}
+    />
+
+    <ProgramSplit />
+
+    <CoachesGrid
+      limit={3}
+      eyebrow="The staff"
+      heading="Meet the coaches"
+      subtitle="USA Swimming–registered, SafeSport-certified coaches building swimmers across the KC metro."
+    />
+
+    <div class="container coaches-cta">
+      <a href="/coaches" class="coaches-cta__link">
+        See the full coaching staff
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+
+    <TestimonialsBand featuredOnly={true} />
+
+    <ServiceAreaBand />
+
+    <FAQAccordion surface="home" heading="Common questions" />
+
+    <CTABand
+      title="Ready to <span class='hero-accent accent'>get in the water?</span>"
+      primaryCta={{ label: 'Book a lesson', href: site.booking.lessons, external: true }}
+      secondaryCta={{ label: 'Team tryouts', href: '/team' }}
+    />
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<style>
+  .coaches-cta {
+    padding: var(--space-6) 0 var(--space-10);
+    background: var(--navy-900);
+    text-align: center;
+  }
+  .coaches-cta__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: var(--teal-400);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+  .coaches-cta__link:hover {
+    color: var(--white);
+    border-color: var(--teal-400);
+  }
+</style>

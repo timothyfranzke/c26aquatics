@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import Button from '@components/ui/Button.astro';
+import krakenOrange from '@assets/brand/kraken-orange.png';
+---
+<Base
+  title="Page not found | C26 Aquatics"
+  description="We can’t find that page. Head back to the C26 Aquatics home, or browse FAQs for swim team and lesson info."
+>
+  <Header />
+  <main class="notfound">
+    <div class="container notfound__inner">
+      <Image
+        src={krakenOrange}
+        alt=""
+        class="notfound__kraken"
+        width={180}
+        height={180}
+        loading="eager"
+      />
+      <p class="notfound__eyebrow">Off course</p>
+      <h1 class="notfound__code">404</h1>
+      <p class="notfound__lede">
+        That page must have swum off to deeper water. Let’s get you back on track.
+      </p>
+      <div class="notfound__ctas">
+        <Button href="/" variant="primary" size="lg">Back to home</Button>
+        <Button href="/faq" variant="outline" size="lg">Browse FAQs</Button>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .notfound {
+    background: linear-gradient(180deg, var(--paper) 0%, var(--mist) 100%);
+    padding: var(--space-20) 0;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+  .notfound__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+    max-width: 640px;
+    margin-inline: auto;
+  }
+  .notfound__kraken {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: var(--space-4);
+  }
+  .notfound__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0;
+  }
+  .notfound__code {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: clamp(96px, 18vw, 180px);
+    line-height: 0.9;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .notfound__lede {
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--text-body);
+    margin: 0 0 var(--space-4);
+    max-width: 480px;
+  }
+  .notfound__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+</style>

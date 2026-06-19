@@ -1,0 +1,160 @@
+---
+/**
+ * C26 button primitive. Renders an <a> when `href` is set, otherwise a <button>.
+ * Squared, condensed, uppercase — athletic energy.
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'outline-light' | 'dark';
+  size?: 'sm' | 'md' | 'lg';
+  external?: boolean;
+  full?: boolean;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  ariaLabel?: string;
+  class?: string;
+  id?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  external,
+  full = false,
+  disabled = false,
+  type = 'button',
+  ariaLabel,
+  class: className,
+  id,
+} = Astro.props;
+
+const isLink = typeof href === 'string' && href.length > 0;
+const isExternal = external ?? (isLink && /^https?:\/\//.test(href!));
+
+const classList = [
+  'c26-btn',
+  `c26-btn--${variant}`,
+  `c26-btn--${size}`,
+  full ? 'c26-btn--full' : '',
+  className ?? '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+{isLink ? (
+  <a
+    href={href}
+    class={classList}
+    id={id}
+    aria-label={ariaLabel}
+    aria-disabled={disabled ? 'true' : undefined}
+    target={isExternal ? '_blank' : undefined}
+    rel={isExternal ? 'noopener noreferrer' : undefined}
+  >
+    <slot />
+  </a>
+) : (
+  <button
+    type={type}
+    class={classList}
+    id={id}
+    aria-label={ariaLabel}
+    disabled={disabled}
+  >
+    <slot />
+  </button>
+)}
+
+<style>
+  .c26-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: var(--r-xs);
+    border: 2px solid transparent;
+    cursor: pointer;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      background var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+  }
+  .c26-btn:hover:not([disabled]):not([aria-disabled='true']) {
+    transform: translateY(-1px);
+  }
+  .c26-btn:active:not([disabled]):not([aria-disabled='true']) {
+    transform: translateY(0);
+  }
+  .c26-btn[disabled],
+  .c26-btn[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .c26-btn--full {
+    width: 100%;
+  }
+
+  /* Sizes */
+  .c26-btn--sm { padding: 8px 16px; font-size: 13px; }
+  .c26-btn--md { padding: 12px 24px; font-size: 15px; }
+  .c26-btn--lg { padding: 16px 36px; font-size: 18px; }
+
+  /* Variants */
+  .c26-btn--primary {
+    background: var(--action);
+    color: var(--action-ink);
+    box-shadow: var(--shadow-action);
+  }
+  .c26-btn--primary:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--action-hover);
+  }
+  .c26-btn--secondary {
+    background: var(--teal-500);
+    color: var(--secondary-ink);
+  }
+  .c26-btn--secondary:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--teal-600);
+  }
+  .c26-btn--dark {
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+  }
+  .c26-btn--dark:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--navy-800);
+  }
+  .c26-btn--outline {
+    background: transparent;
+    color: var(--navy-700);
+    border-color: var(--navy-700);
+  }
+  .c26-btn--outline:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+  }
+  .c26-btn--outline-light {
+    background: transparent;
+    color: var(--text-on-dark);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  .c26-btn--outline-light:hover:not([disabled]):not([aria-disabled='true']) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  .c26-btn--ghost {
+    background: transparent;
+    color: var(--navy-700);
+  }
+  .c26-btn--ghost:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--surface-inset);
+  }
+</style>

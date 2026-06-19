@@ -1,0 +1,225 @@
+---
+import { Image } from 'astro:assets';
+import krakenWhite from '@assets/brand/kraken-white.png';
+import { primaryNav } from '@data/nav';
+import { site } from '@data/site';
+import Button from '@components/ui/Button.astro';
+import MobileMenu from '@components/layout/MobileMenu.astro';
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+function isCurrent(href: string): boolean {
+  const target = href.replace(/\/+$/, '') || '/';
+  return target === currentPath;
+}
+---
+<header class="c26-header" data-scrolled="false">
+  <div class="c26-header__inner">
+    <a href="/" class="c26-header__brand" aria-label={`${site.name} home`}>
+      <Image
+        src={krakenWhite}
+        alt=""
+        class="c26-header__kraken"
+        width={92}
+        height={92}
+        densities={[1, 2]}
+        loading="eager"
+        decoding="sync"
+      />
+      <span class="c26-header__wordmark">
+        <span class="c26-header__wordmark-main">
+          C<span class="c26-header__wordmark-num">26</span>
+        </span>
+        <span class="c26-header__wordmark-sub">AQUATICS</span>
+      </span>
+    </a>
+
+    <nav class="c26-header__nav" aria-label="Primary">
+      <ul class="c26-header__nav-list">
+        {primaryNav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="c26-header__nav-link"
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <Button href={site.booking.lessons} variant="primary" size="sm" external>
+        Book Now
+      </Button>
+    </nav>
+
+    <div class="c26-header__mobile-actions">
+      <Button href={site.booking.lessons} variant="primary" size="sm" external>
+        Book Now
+      </Button>
+      <button
+        type="button"
+        class="c26-header__menu-btn"
+        aria-label="Open menu"
+        aria-controls="c26-mobile-menu"
+        aria-expanded="false"
+        data-mobile-menu-toggle
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<MobileMenu />
+
+<script>
+  const header = document.querySelector<HTMLElement>('.c26-header');
+  if (header) {
+    const onScroll = () => {
+      header.dataset.scrolled = window.scrollY > 4 ? 'true' : 'false';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
+
+<style>
+  .c26-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: box-shadow var(--dur-base) var(--ease-out);
+  }
+  .c26-header[data-scrolled='true'] {
+    box-shadow: var(--shadow-md);
+  }
+
+  .c26-header__inner {
+    width: min(var(--container), 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .c26-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-on-dark);
+  }
+  .c26-header__kraken {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    flex: none;
+  }
+  .c26-header__wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+  .c26-header__wordmark-main {
+    font-weight: var(--fw-black);
+    font-size: 26px;
+    letter-spacing: var(--ls-tight);
+    color: var(--text-on-dark);
+  }
+  .c26-header__wordmark-num {
+    color: var(--orange-500);
+  }
+  .c26-header__wordmark-sub {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--teal-400);
+  }
+
+  .c26-header__nav {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .c26-header__nav-list {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .c26-header__nav-link {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    color: var(--text-on-dark);
+    padding: 6px 2px;
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+  .c26-header__nav-link:hover {
+    color: var(--teal-400);
+  }
+  .c26-header__nav-link[aria-current='page'] {
+    border-bottom-color: var(--orange-500);
+    color: var(--text-on-dark);
+  }
+
+  .c26-header__mobile-actions {
+    display: none;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .c26-header__menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    color: var(--text-on-dark);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--r-xs);
+  }
+  .c26-header__menu-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 900px) {
+    .c26-header__nav {
+      display: none;
+    }
+    .c26-header__mobile-actions {
+      display: inline-flex;
+    }
+    .c26-header__inner {
+      height: 64px;
+    }
+    .c26-header__kraken {
+      width: 40px;
+      height: 40px;
+    }
+    .c26-header__wordmark-main {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .c26-header__wordmark-sub {
+      display: none;
+    }
+  }
+</style>
