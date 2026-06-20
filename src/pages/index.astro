@@ -3,7 +3,9 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
+import StatsBand from '@components/sections/StatsBand.astro';
 import ProgramSplit from '@components/sections/ProgramSplit.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
@@ -23,16 +25,18 @@ const orgSchema = sportsOrganizationSchema();
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
   </Fragment>
 
+  <BrandIntro />
   <Header />
   <main>
     <Hero
       variant="home"
-      eyebrow="C26 Aquatics"
-      title="Become a <span class='hero-accent'>stronger</span> swimmer"
+      title=""
       subtitle="Competitive team training and learn-to-swim lessons in the Kansas City metro."
       primaryCta={{ label: 'Explore the team', href: '/team' }}
       secondaryCta={{ label: 'Swim lessons', href: '/swim-lessons' }}
     />
+
+    <StatsBand />
 
     <ProgramSplit />
 

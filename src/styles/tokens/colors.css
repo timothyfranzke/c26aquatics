@@ -5,6 +5,7 @@
    =========================================================================== */
 :root {
   /* ---- Navy (primary / ground) ---- */
+  --navy-wordmark: #021c36;  /* matches the wordmark PNG bg — use for surfaces hosting the raw wordmark artwork */
   --navy-900: #0b1f2b;   /* near-black sections, footers */
   --navy-800: #112d3d;
   --navy-700: #183e53;   /* BASE brand navy (from logo) */

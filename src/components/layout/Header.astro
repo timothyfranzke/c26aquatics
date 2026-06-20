@@ -1,12 +1,14 @@
 ---
 import { Image } from 'astro:assets';
 import krakenWhite from '@assets/brand/kraken-white.png';
+import wordmark from '@assets/brand/wordmark-navy.png';
 import { primaryNav } from '@data/nav';
 import { site } from '@data/site';
 import Button from '@components/ui/Button.astro';
 import MobileMenu from '@components/layout/MobileMenu.astro';
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isHome = currentPath === '/';
 
 function isCurrent(href: string): boolean {
   const target = href.replace(/\/+$/, '') || '/';
@@ -15,7 +17,12 @@ function isCurrent(href: string): boolean {
 ---
 <header class="c26-header" data-scrolled="false">
   <div class="c26-header__inner">
-    <a href="/" class="c26-header__brand" aria-label={`${site.name} home`}>
+    <a
+      href="/"
+      class="c26-header__brand"
+      data-pinned={isHome ? 'hero' : undefined}
+      aria-label={`${site.name} home`}
+    >
       <Image
         src={krakenWhite}
         alt=""
@@ -26,12 +33,16 @@ function isCurrent(href: string): boolean {
         loading="eager"
         decoding="sync"
       />
-      <span class="c26-header__wordmark">
-        <span class="c26-header__wordmark-main">
-          C<span class="c26-header__wordmark-num">26</span>
-        </span>
-        <span class="c26-header__wordmark-sub">AQUATICS</span>
-      </span>
+      <Image
+        src={wordmark}
+        alt="C26 Aquatics"
+        class="c26-header__wordmark"
+        width={384}
+        height={256}
+        densities={[1, 2]}
+        loading="eager"
+        decoding="sync"
+      />
     </a>
 
     <nav class="c26-header__nav" aria-label="Primary">
@@ -83,6 +94,21 @@ function isCurrent(href: string): boolean {
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // On the home page, the brand mark hides while the hero is in view and
+    // animates in once the hero has scrolled past the header.
+    const heroHome = document.querySelector('.hero--home');
+    const brand = header.querySelector<HTMLElement>('.c26-header__brand');
+    if (heroHome && brand) {
+      const headerH = header.offsetHeight || 72;
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          brand.dataset.pinned = entry.isIntersecting ? 'hero' : 'header';
+        },
+        { rootMargin: `-${headerH}px 0px 0px 0px`, threshold: 0 }
+      );
+      io.observe(heroHome);
+    }
   }
 </script>
 
@@ -91,7 +117,8 @@ function isCurrent(href: string): boolean {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--navy-700);
+    /* Match the wordmark PNG's intrinsic bg so the artwork composites with no seam. */
+    background: var(--navy-wordmark);
     color: var(--text-on-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     transition: box-shadow var(--dur-base) var(--ease-out);
@@ -115,6 +142,23 @@ function isCurrent(href: string): boolean {
     align-items: center;
     gap: var(--space-3);
     color: var(--text-on-dark);
+    transition:
+      opacity 280ms var(--ease-out),
+      transform 320ms var(--ease-out);
+  }
+  /* Home page: brand hides while hero owns the wordmark, then animates in. */
+  .c26-header__brand[data-pinned='hero'] {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.94);
+    pointer-events: none;
+  }
+  .c26-header__brand[data-pinned='header'] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c26-header__brand { transition: none; }
   }
   .c26-header__kraken {
     width: 46px;
@@ -123,27 +167,10 @@ function isCurrent(href: string): boolean {
     flex: none;
   }
   .c26-header__wordmark {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    font-family: var(--font-display);
-    line-height: 1;
-  }
-  .c26-header__wordmark-main {
-    font-weight: var(--fw-black);
-    font-size: 26px;
-    letter-spacing: var(--ls-tight);
-    color: var(--text-on-dark);
-  }
-  .c26-header__wordmark-num {
-    color: var(--orange-500);
-  }
-  .c26-header__wordmark-sub {
-    font-family: var(--font-subhead);
-    font-weight: var(--fw-semibold);
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--teal-400);
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+    flex: none;
   }
 
   .c26-header__nav {
@@ -212,13 +239,13 @@ function isCurrent(href: string): boolean {
       width: 40px;
       height: 40px;
     }
-    .c26-header__wordmark-main {
-      font-size: 22px;
+    .c26-header__wordmark {
+      height: 32px;
     }
   }
 
   @media (max-width: 480px) {
-    .c26-header__wordmark-sub {
+    .c26-header__wordmark {
       display: none;
     }
   }

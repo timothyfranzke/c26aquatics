@@ -1,0 +1,45 @@
+---
+/**
+ * StatsBand — dark navy strip of headline stats sitting under the hero.
+ * Pulls from src/data/stats.ts by default; pass `stats` to override per-page.
+ */
+import StatBlock from '@components/ui/StatBlock.astro';
+import { homeStats, type Stat } from '@data/stats';
+
+interface Props {
+  stats?: Stat[];
+  ariaLabel?: string;
+}
+
+const { stats = homeStats, ariaLabel = 'Program highlights' } = Astro.props;
+---
+<section class="stats-band" aria-label={ariaLabel}>
+  <div class="container stats-band__inner">
+    {stats.map((stat) => (
+      <StatBlock value={stat.value} label={stat.label} tone="dark" />
+    ))}
+  </div>
+</section>
+
+<style>
+  .stats-band {
+    background: var(--navy-900);
+    color: var(--text-on-dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .stats-band__inner {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-6);
+    padding: var(--space-12) 0;
+  }
+
+  @media (max-width: 720px) {
+    .stats-band__inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-8) var(--space-6);
+      padding: var(--space-10) 0;
+    }
+  }
+</style>

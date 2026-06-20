@@ -38,28 +38,39 @@ async function buildOgCard() {
   const W = 1200;
   const H = 630;
 
-  // Full-bleed kraken backdrop scaled to the canvas height, centered.
-  const krakenSize = H;
-  const kraken = await sharp(KRAKEN_WHITE)
-    .resize(krakenSize, krakenSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toBuffer();
+  // Layout: kraken occupies the upper portion of the canvas (prominent and
+  // fully visible). The "C26 AQUATICS" wordmark sits at the bottom on its
+  // own line so the kraken never sits on top of the text.
+  const BOTTOM_PADDING = 56;        // breathing room below the wordmark
+  const KRAKEN_WORDMARK_GAP = 32;   // space between kraken and wordmark
+  const TOP_PADDING = 40;
 
   // Trim the solid navy padding around the wordmark so it composites cleanly
   // onto the navy canvas with no visible rectangle seam.
-  const wordmarkTargetWidth = 720;
+  const wordmarkTargetWidth = 640;
   const wordmark = await sharp(WORDMARK)
     .trim({ background: { r: 0x02, g: 0x1c, b: 0x36 }, threshold: 20 })
     .resize({ width: wordmarkTargetWidth })
     .png()
     .toBuffer();
-
   const wordmarkMeta = await sharp(wordmark).metadata();
 
+  // Kraken fills whatever vertical space is left after we reserve the
+  // wordmark area at the bottom. Bound it so it never grows wider than
+  // the canvas at narrow aspect ratios.
+  const krakenAvailableHeight =
+    H - TOP_PADDING - wordmarkMeta.height - KRAKEN_WORDMARK_GAP - BOTTOM_PADDING;
+  const krakenSize = Math.min(krakenAvailableHeight, 460);
+
+  const kraken = await sharp(KRAKEN_WHITE)
+    .resize(krakenSize, krakenSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png()
+    .toBuffer();
+
   const krakenLeft = Math.round((W - krakenSize) / 2);
-  const krakenTop = Math.round((H - krakenSize) / 2);
+  const krakenTop = TOP_PADDING + Math.round((krakenAvailableHeight - krakenSize) / 2);
   const wordmarkLeft = Math.round((W - wordmarkMeta.width) / 2);
-  const wordmarkTop = Math.round((H - wordmarkMeta.height) / 2);
+  const wordmarkTop = H - BOTTOM_PADDING - wordmarkMeta.height;
 
   const canvas = sharp({
     create: {
