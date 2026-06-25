@@ -27,6 +27,9 @@ dist/
 # Netlify
 .netlify/
 
+# Claude Code local state (worktrees, etc.) — never commit these as gitlinks
+.claude/
+
 # Source design artifacts (not part of site code)
 1.png
 ChatGPT Image*.png
