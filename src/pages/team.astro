@@ -9,6 +9,7 @@ import Hero from '@components/sections/Hero.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import TrackTabs from '@components/widgets/TrackTabs.astro';
+import TrainingGroupsTable from '@components/widgets/TrainingGroupsTable.astro';
 import StatBlock from '@components/ui/StatBlock.astro';
 import { site } from '@data/site';
 import {
@@ -26,14 +27,7 @@ const groups = (await getCollection('training-groups')).sort(
   (a: GroupEntry, b: GroupEntry) => a.data.order - b.data.order,
 );
 
-const commitmentLabel: Record<
-  GroupEntry['data']['commitmentLevel'],
-  string
-> = {
-  developmental: 'Developmental',
-  competitive: 'Competitive',
-  elite: 'Elite',
-};
+const usd = (n: number) => (n % 1 === 0 ? `$${n}` : `$${n.toFixed(2)}`);
 
 const tracks = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
@@ -42,16 +36,25 @@ const tracks = groups.map((entry: GroupEntry) => ({
   bodyHtml: micromark(entry.body),
   meta: [
     { label: 'Ages', value: entry.data.ageRange },
-    { label: 'Schedule', value: entry.data.schedule },
-    { label: 'Commitment', value: commitmentLabel[entry.data.commitmentLevel] },
-    {
-      label: 'Prerequisites',
-      value:
-        entry.data.prerequisites.length > 0
-          ? entry.data.prerequisites.join(', ')
-          : 'None',
-    },
+    { label: 'Group size', value: `${entry.data.groupSize}` },
+    { label: 'Practices', value: entry.data.suggestedPractices },
+    { label: 'Hrs/mo', value: `${entry.data.monthlyHours}` },
+    { label: 'Monthly', value: usd(entry.data.monthlyCost) },
+    { label: 'Per hour', value: usd(entry.data.costPerHour) },
   ],
+  scheduleOptions: entry.data.scheduleOptions,
+}));
+
+const compareRows = groups.map((entry: GroupEntry) => ({
+  slug: entry.slug,
+  name: entry.data.name,
+  ageRange: entry.data.ageRange,
+  groupSize: entry.data.groupSize,
+  suggestedPractices: entry.data.suggestedPractices,
+  monthlyHours: entry.data.monthlyHours,
+  monthlyCost: entry.data.monthlyCost,
+  costPerHour: entry.data.costPerHour,
+  commitmentLevel: entry.data.commitmentLevel,
 }));
 ---
 <Base
@@ -69,7 +72,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
       variant="page"
       eyebrow="Competitive team"
       title="Train. Compete. <span class='hero-accent'>Improve.</span>"
-      subtitle="USA Swimming–registered training groups for committed athletes — Bronze through Platinum."
+      subtitle="USA Swimming–registered training groups for committed athletes — Pre-Competitive through Senior Elite."
       primaryCta={{ label: 'Start tryouts', href: site.booking.team, external: true }}
     />
 
@@ -77,8 +80,15 @@ const tracks = groups.map((entry: GroupEntry) => ({
       id="team-tabs"
       eyebrow="Training groups"
       heading="Find your training group"
-      subtitle="Four groups, calibrated by age and ability — every swimmer placed by coach evaluation."
+      subtitle="Seven groups, calibrated by age and ability — every swimmer placed by coach evaluation."
       tracks={tracks}
+    />
+
+    <TrainingGroupsTable
+      eyebrow="At a glance"
+      heading="Compare the groups"
+      subtitle="Every group side by side — ages, schedule load, and cost per pool hour."
+      rows={compareRows}
     />
 
     <section class="philosophy" aria-labelledby="philosophy-title">
@@ -94,7 +104,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
           </p>
         </header>
         <div class="philosophy__stats">
-          <StatBlock value="4" label="Training groups" accent="orange" tone="light" align="left" />
+          <StatBlock value="7" label="Training groups" accent="orange" tone="light" align="left" />
           <StatBlock value="100%" label="SafeSport-certified coaches" accent="teal" tone="light" align="left" />
           <StatBlock value="6+" label="KC-metro communities served" accent="navy" tone="light" align="left" />
         </div>

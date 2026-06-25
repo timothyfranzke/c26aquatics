@@ -17,12 +17,23 @@ interface MetaItem {
   value: string;
 }
 
+interface ScheduleSlot {
+  day: string;
+  time: string;
+}
+
+interface ScheduleOption {
+  label?: string;
+  slots: ScheduleSlot[];
+}
+
 interface Track {
   slug: string;
   name: string;
   eyebrowText?: string;
   bodyHtml: string;
   meta?: MetaItem[];
+  scheduleOptions?: ScheduleOption[];
 }
 
 interface Props {
@@ -86,6 +97,41 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                   </div>
                 ))}
               </dl>
+            )}
+            {track.scheduleOptions && track.scheduleOptions.length > 0 && (
+              <div class="tracks__schedule" data-schedule>
+                <p class="tracks__schedule-label">Weekly schedule</p>
+                {track.scheduleOptions.length > 1 && (
+                  <div class="tracks__sched-toggle" role="tablist" aria-label="Schedule options">
+                    {track.scheduleOptions.map((opt, oi) => (
+                      <button
+                        type="button"
+                        role="tab"
+                        class="tracks__sched-tab"
+                        aria-selected={oi === 0 ? 'true' : 'false'}
+                        tabindex={oi === 0 ? 0 : -1}
+                        data-sched-tab={oi}
+                      >
+                        {opt.label ?? `Option ${oi + 1}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {track.scheduleOptions.map((opt, oi) => (
+                  <ul
+                    class="tracks__slots"
+                    data-sched-panel={oi}
+                    hidden={oi !== 0}
+                  >
+                    {opt.slots.map((slot) => (
+                      <li class="tracks__slot">
+                        <span class="tracks__slot-day">{slot.day}</span>
+                        <span class="tracks__slot-time">{slot.time}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
             )}
             <div class="tracks__body" set:html={track.bodyHtml}></div>
           </div>
@@ -162,6 +208,47 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
   document
     .querySelectorAll<HTMLElement>('[data-track-tabs]')
     .forEach((el) => initTrackTabs(el));
+
+  // Schedule Option 1 / Option 2 sub-toggle, scoped to each panel that has one.
+  function initSchedule(root: HTMLElement) {
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('[data-sched-tab]'),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-sched-panel]'),
+    );
+    if (tabs.length === 0) return;
+
+    function show(index: number) {
+      tabs.forEach((tab, i) => {
+        const isActive = i === index;
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+      panels.forEach((panel) => {
+        const isActive = Number(panel.dataset.schedPanel) === index;
+        panel.hidden = !isActive;
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => show(index));
+      tab.addEventListener('keydown', (event: KeyboardEvent) => {
+        let next: number | null = null;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft')
+          next = (index - 1 + tabs.length) % tabs.length;
+        else return;
+        event.preventDefault();
+        show(next);
+        tabs[next].focus();
+      });
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-schedule]')
+    .forEach((el) => initSchedule(el));
 </script>
 
 <style>
@@ -287,6 +374,83 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
     font-size: 14px;
     color: var(--text-strong);
     font-weight: var(--fw-medium);
+  }
+
+  /* ----- weekly schedule + Option 1 / Option 2 toggle ----- */
+  .tracks__schedule {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .tracks__schedule-label {
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+  }
+  .tracks__sched-toggle {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-pill);
+    align-self: flex-start;
+  }
+  .tracks__sched-tab {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--r-pill);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 12px;
+    color: var(--text-muted);
+    transition:
+      background var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+  }
+  .tracks__sched-tab[aria-selected='true'] {
+    background: var(--navy-700);
+    color: var(--white);
+  }
+  .tracks__slots {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-2);
+  }
+  .tracks__slots[hidden] { display: none; }
+  .tracks__slot {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+  .tracks__slot-day {
+    flex: none;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 12px;
+    color: var(--navy-700);
+    min-width: 30px;
+  }
+  .tracks__slot-time {
+    font-size: 13px;
+    color: var(--text-body);
   }
 
   .tracks__body {

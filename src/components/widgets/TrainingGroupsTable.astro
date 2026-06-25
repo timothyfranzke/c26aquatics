@@ -1,0 +1,220 @@
+---
+/**
+ * TrainingGroupsTable — side-by-side compare table for the /team page.
+ * Columns: Group / Ages / Size / Practices / Hrs mo / Monthly / Per hour.
+ * Rows arrive pre-sorted by `order`. The Per-hour column is tinted and each
+ * row carries a commitment-level dot (developmental / competitive / elite).
+ */
+type CommitmentLevel = 'developmental' | 'competitive' | 'elite';
+
+interface Row {
+  slug: string;
+  name: string;
+  ageRange: string;
+  groupSize: number;
+  suggestedPractices: string;
+  monthlyHours: number;
+  monthlyCost: number;
+  costPerHour: number;
+  commitmentLevel: CommitmentLevel;
+}
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  subtitle?: string;
+  rows: Row[];
+}
+
+const {
+  eyebrow = 'At a glance',
+  heading = 'Compare the groups',
+  subtitle,
+  rows,
+} = Astro.props;
+
+const levelLabel: Record<CommitmentLevel, string> = {
+  developmental: 'Developmental',
+  competitive: 'Competitive',
+  elite: 'Elite',
+};
+
+const usd = (n: number) =>
+  n % 1 === 0 ? `$${n}` : `$${n.toFixed(2)}`;
+---
+<section class="compare" aria-labelledby="compare-title">
+  <div class="container">
+    <header class="compare__head">
+      {eyebrow && <p class="compare__eyebrow">{eyebrow}</p>}
+      <h2 id="compare-title" class="compare__heading">{heading}</h2>
+      {subtitle && <p class="compare__subtitle">{subtitle}</p>}
+    </header>
+
+    <div class="compare__scroll">
+      <table class="compare__table">
+        <thead>
+          <tr>
+            <th scope="col" class="compare__col-group">Group</th>
+            <th scope="col">Ages</th>
+            <th scope="col">Size</th>
+            <th scope="col">Practices</th>
+            <th scope="col">Hrs / mo</th>
+            <th scope="col">Monthly</th>
+            <th scope="col" class="compare__col-rate">Per hour</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              <th scope="row" class="compare__col-group">
+                <span
+                  class:list={['compare__dot', `compare__dot--${row.commitmentLevel}`]}
+                  aria-hidden="true"
+                ></span>
+                <span class="compare__group-name">{row.name}</span>
+                <span class="compare__group-level">{levelLabel[row.commitmentLevel]}</span>
+              </th>
+              <td>{row.ageRange}</td>
+              <td>{row.groupSize}</td>
+              <td>{row.suggestedPractices}</td>
+              <td>{row.monthlyHours}</td>
+              <td>{usd(row.monthlyCost)}</td>
+              <td class="compare__col-rate">{usd(row.costPerHour)}<span class="compare__per">/hr</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .compare {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .compare__head {
+    max-width: 720px;
+    margin-bottom: var(--space-8);
+  }
+  .compare__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .compare__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .compare__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  .compare__scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .compare__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+    background: var(--surface);
+  }
+  .compare__table thead th {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+    text-align: right;
+    padding: var(--space-4) var(--space-4);
+    background: var(--surface-alt);
+    border-bottom: 2px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .compare__table tbody td {
+    text-align: right;
+    padding: var(--space-4) var(--space-4);
+    font-size: 15px;
+    color: var(--text-strong);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .compare__table tbody tr:last-child td,
+  .compare__table tbody tr:last-child th { border-bottom: 0; }
+
+  /* Group column — left aligned, level dot + name + sub-label */
+  th.compare__col-group { text-align: left; }
+  td.compare__col-group,
+  .compare__table tbody th.compare__col-group {
+    text-align: left;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-2);
+    row-gap: 1px;
+    align-items: center;
+  }
+  .compare__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    grid-row: 1 / span 2;
+  }
+  .compare__dot--developmental { background: var(--teal-500); }
+  .compare__dot--competitive { background: var(--orange-500); }
+  .compare__dot--elite { background: var(--magenta-500); }
+  .compare__group-name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 16px;
+    color: var(--navy-700);
+    line-height: 1.1;
+  }
+  .compare__group-level {
+    grid-column: 2;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* Per-hour column — tinted highlight */
+  .compare__col-rate {
+    background: var(--teal-50, rgba(47, 208, 224, 0.08));
+  }
+  td.compare__col-rate {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    color: var(--teal-700);
+  }
+  .compare__per {
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-left: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .compare__scroll { border-radius: var(--r-md); }
+  }
+</style>

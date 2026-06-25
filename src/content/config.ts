@@ -19,9 +19,26 @@ const trainingGroups = defineCollection({
   type: 'content',
   schema: z.object({
     name: z.string(),
-    ageRange: z.string(),
-    schedule: z.string(),
+    ageRange: z.string(), // "5–8 yrs"
+    groupSize: z.number(),
+    suggestedPractices: z.string(), // "2×/week", "2–3×/week"
+    monthlyHours: z.number(), // avg hrs / month
+    monthlyCost: z.number(), // USD
+    costPerHour: z.number(), // USD, stored for display
     commitmentLevel: z.enum(['developmental', 'competitive', 'elite']),
+    scheduleOptions: z
+      .array(
+        z.object({
+          label: z.string().optional(), // "Option 1" when >1 option
+          slots: z.array(
+            z.object({
+              day: z.string(),
+              time: z.string(),
+            }),
+          ),
+        }),
+      )
+      .min(1),
     prerequisites: z.array(z.string()).default([]),
     order: z.number(),
   }),
