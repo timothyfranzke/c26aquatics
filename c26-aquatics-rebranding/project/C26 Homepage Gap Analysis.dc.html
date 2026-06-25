@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@600;700;800&family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#fff; color:#15262f; font-family:"Barlow",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  .doc { box-sizing:border-box; max-width:8.5in; margin:0 auto; background:inherit; padding:48px clamp(24px,5vw,0.75in) 96px; }
+  .doc-frame { width:100%; border-collapse:collapse; }
+  .doc-frame td { padding:0; }
+  .hdr-space, .ftr-space { display:none; }
+  h1,h2,h3 { text-wrap:balance; }
+  p,li { text-wrap:pretty; }
+  @page { size:letter; margin:0; }
+  @media print {
+    html { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    html, body { margin:0; padding:0; }
+    .doc { max-width:none !important; margin:0 !important; padding:0 0.6in !important; box-shadow:none !important; }
+    .hdr-space, .ftr-space { display:table-cell; height:0.6in; }
+    .card, pre, blockquote, .callout, .vsgrid { break-inside:avoid; }
+    h1,h2,h3,h4 { break-after:avoid; }
+    p,li { orphans:3; widows:3; }
+    .screen-only { display:none !important; }
+  }
+</style>
+</helmet>
+
+<main class="doc">
+<table class="doc-frame" role="presentation">
+<thead><tr><td class="hdr-space"></td></tr></thead>
+<tbody><tr><td>
+
+<!-- ===== MASTHEAD ===== -->
+<div style="font-family:'Barlow Semi Condensed';font-weight:600;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#0e96a8">C26 Aquatics · Rebrand · Homepage</div>
+<h1 style="font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;font-size:46px;line-height:.95;letter-spacing:-.02em;color:#242b6e;margin:8px 0 0">Homepage gap analysis</h1>
+<p style="font-size:16px;line-height:1.6;color:#2c3f49;max-width:64ch;margin:14px 0 0">A section-by-section diff between <strong>our wireframe</strong> (<code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:#eef3f5;padding:1px 6px;border-radius:4px">C26 Aquatics Site v3</code>) and the <strong>current codebase</strong> (the attached Astro project). The hero has already been synced — the wire now mirrors the as-built hero. Everything below is written as instructions you can hand to your coding agents: each card names the exact file to touch and the action to take.</p>
+<div class="screen-only" style="font-family:'Barlow Semi Condensed';font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:#8aa0ab;margin-top:12px">Tip · ⌘P / Ctrl-P to save this as a PDF</div>
+
+<!-- ===== LEGEND ===== -->
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 8px">
+  <div style="flex:1;min-width:180px;background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:8px;padding:12px 14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:#0a7886">Aligned</div>
+    <div style="font-size:13px;line-height:1.5;color:#2c3f49;margin-top:3px">Code already matches the wire. Verify copy, then move on.</div>
+  </div>
+  <div style="flex:1;min-width:180px;background:#fff;border:1px solid #d7e0e5;border-left:4px solid #f38f1f;border-radius:8px;padding:12px 14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:#c26a09">Gap — build it</div>
+    <div style="font-size:13px;line-height:1.5;color:#2c3f49;margin-top:3px">In the wire, missing or behind in code. Clear action.</div>
+  </div>
+  <div style="flex:1;min-width:180px;background:#fff;border:1px solid #d7e0e5;border-left:4px solid #c41e6f;border-radius:8px;padding:12px 14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:#c41e6f">Decision needed</div>
+    <div style="font-size:13px;line-height:1.5;color:#2c3f49;margin-top:3px">Wire and code diverge. Pick a direction before building.</div>
+  </div>
+</div>
+
+<!-- ===== SECTION ORDER OVERVIEW ===== -->
+<h2 style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:24px;letter-spacing:-.01em;color:#242b6e;margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid #18bcd0">Section order at a glance</h2>
+<div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+  <div style="background:#ecf6f6;border-radius:8px;padding:14px 16px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#0a7886;margin-bottom:8px">Wireframe order</div>
+    <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.7;color:#2c3f49">
+      <li>Hero</li><li>Stats band</li><li><strong>Mission / story</strong></li><li>The C26 difference</li><li>Programs — age groups</li><li>Coaches &amp; bios</li><li>Testimonial</li><li>Single location</li><li>FAQ</li><li>Final CTA</li>
+    </ol>
+  </div>
+  <div style="background:#f6f9fa;border-radius:8px;padding:14px 16px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#5d7480;margin-bottom:8px">Codebase order (index.astro)</div>
+    <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.7;color:#2c3f49">
+      <li>Hero</li><li>StatsBand</li><li style="color:#c26a09"><em>— none —</em></li><li>DifferenceBand</li><li>TracksLadder</li><li>CoachesGrid <span style="color:#5d7480">(compact)</span></li><li>TestimonialsBand</li><li>ServiceAreaBand</li><li>FAQAccordion</li><li>CTABand</li>
+    </ol>
+  </div>
+</div>
+<p style="font-size:14px;line-height:1.6;color:#2c3f49;margin:12px 0 0">Three structural divergences drive most of the work: the wire's <strong>Mission/story</strong> band has no counterpart in code; the wire's <strong>Testimonial</strong> and <strong>Single location</strong> bands are built quite differently in code (Testimonials 3-up, plus a Service-area SEO band). Details below.</p>
+
+<!-- ===== HERO ===== -->
+<h2 style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:24px;letter-spacing:-.01em;color:#242b6e;margin:38px 0 18px;padding-bottom:8px;border-bottom:2px solid #18bcd0">Section-by-section</h2>
+
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">01 · Hero</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:4px 11px">Aligned — synced</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">Hero.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">pages/index.astro</code></div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">None. The wire was updated this round to match the as-built hero (full-bleed <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">hero-1.png</code>, left-weighted navy overlay, centered kraken + wordmark lockup with masked fade, magenta &ldquo;stronger&rdquo;, orange + magenta-outline CTAs, scroll parallax). Treat the codebase hero as the reference. Optional nit: confirm the secondary CTA points at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">#tracks</code>.</div>
+  </div>
+</div>
+
+<!-- ===== STATS ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">02 · Stats band</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:4px 11px">Aligned — verify copy</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">StatsBand.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">data/stats.ts</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Navy band, 4 figures in teal: ≤4 per class · 20+ years · 365 days · 1 location.</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Same layout, 4 stats pulled from <code style="font-family:'JetBrains Mono',monospace;font-size:12px">data/stats.ts</code>.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">Check the four entries in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">data/stats.ts</code> read exactly as the wire (value + label). No layout change.</div>
+  </div>
+</div>
+
+<!-- ===== MISSION ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #f38f1f;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">03 · Mission / story</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#c26a09;background:#fff0db;border-radius:999px;padding:4px 11px">Gap — missing in code</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">NEW: sections/MissionBand.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">pages/index.astro</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">White 2-column band: eyebrow &ldquo;Our mission&rdquo;, H2 &ldquo;Stronger swimmers, for life&rdquo;, two paragraphs, and a 4:5 founders/story photo on the right.</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">No equivalent — the page goes StatsBand → DifferenceBand directly.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">Build a <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">MissionBand.astro</code> (2-col text + <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">&lt;Image&gt;</code>, white surface, same container + eyebrow/heading type as DifferenceBand) and insert it in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">index.astro</code> between <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">&lt;StatsBand/&gt;</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">&lt;DifferenceBand/&gt;</code>. Needs a founders photo asset.</div>
+  </div>
+</div>
+
+<!-- ===== DIFFERENCE ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">04 · The C26 difference</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:4px 11px">Aligned</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">DifferenceBand.astro</code></div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">None. Paper surface, magenta &ldquo;Why C26&rdquo; eyebrow, three blue-left-border pillars — matches the wire one-to-one.</div>
+  </div>
+</div>
+
+<!-- ===== TRACKS ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">05 · Programs — age groups</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:4px 11px">Aligned — verify copy</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">TracksLadder.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">data/tracks.ts</code></div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">None structurally — 2×2 cards, faded ordinal, blue age pill, magenta CTA all match. Just confirm the four entries in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">data/tracks.ts</code> (title / age / desc) read like the wire.</div>
+  </div>
+</div>
+
+<!-- ===== COACHES ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #c41e6f;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">06 · Coaches</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:4px 11px">Decision + gap</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">CoachesGrid.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">content/coaches/*</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Navy section, heading &ldquo;Coaches &amp; bios&rdquo;, 3 full cards with portrait + role + bio. Plus the new hatch-band lead-in and a kraken watermark (see Background treatments).</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Heading &ldquo;Meet the coaches&rdquo;, <code style="font-family:'JetBrains Mono',monospace;font-size:12px">compact</code> variant — chrome-less photo + name + role only (no bio/badges) + a &ldquo;See the full coaching staff&rdquo; link. Flat navy, no seam or watermark.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <ul style="font-size:14px;line-height:1.55;margin:0;padding-left:18px">
+      <li><strong>Decide:</strong> compact homepage cards (code, keeps it short) vs full bio cards (wire). Recommendation — keep <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">compact</code> on home, reserve full bios for <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">/coaches</code>. If bios are wanted on home, pass <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">compact={false}</code>.</li>
+      <li><strong>Copy:</strong> pick one heading — &ldquo;Coaches &amp; bios&rdquo; or &ldquo;Meet the coaches&rdquo;.</li>
+      <li><strong>Gap:</strong> add the seam-hatch divider + kraken watermark (next section).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== TESTIMONIALS ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #c41e6f;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">07 · Testimonials</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:4px 11px">Decision needed</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">TestimonialsBand.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">content/testimonials/*</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">One big centered pull-quote on a deep navy band — single voice, dramatic.</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Three quote cards in a row on a paper background, teal quote marks, heading &ldquo;Families who swim with us&rdquo;.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">Pick the format before building. Recommendation — keep the code's <strong>3-up paper grid</strong> (stronger social proof, more voices); it's a deliberate upgrade over the single wire quote. If you want the wire's single-navy moment, that's a component redesign, not a tweak.</div>
+  </div>
+</div>
+
+<!-- ===== LOCATION / SERVICE ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #c41e6f;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">08 · Location vs service area</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:4px 11px">Decision needed</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">ServiceAreaBand.astro</code><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">data/serviceArea.ts</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">&ldquo;Single location — One pool. One standard.&rdquo; Paper 2-col with address, hours, and a facility/map placeholder.</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">A navy <em>service-area</em> band of KC-metro city chips (local SEO), heading &ldquo;Proudly serving the KC metro&rdquo;, link to <code style="font-family:'JetBrains Mono',monospace;font-size:12px">/about#service-area</code>.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">These solve different jobs — the code band is an SEO play (city names as crawlable text); the wire band gives address + hours. Decide what home shows: <strong>(a)</strong> location + hours, <strong>(b)</strong> service-area chips, or <strong>(c)</strong> both (chips here, address in the footer to avoid redundancy). If you want the wire's band, build a <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">LocationBand.astro</code>; keep <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">ServiceAreaBand</code> for SEO.</div>
+  </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #18bcd0;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">09 · FAQ</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:4px 11px">Aligned — minor nits</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">FAQAccordion.astro</code></div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:14px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <div style="font-size:14px;line-height:1.55">Structurally aligned, and the code version is better — it emits matching FAQ <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffd9a8">JSON-LD</code>. Two nits: align the heading (&ldquo;Frequently asked&rdquo; vs &ldquo;Common questions&rdquo;) and the toggle accent (wire magenta vs code orange chevron). Keep the code's content-collection approach.</div>
+  </div>
+</div>
+
+<!-- ===== FINAL CTA ===== -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #f38f1f;border-radius:10px;padding:20px 22px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:21px;color:#242b6e">10 · Final CTA</div>
+    <span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:#c26a09;background:#fff0db;border-radius:999px;padding:4px 11px">Gap + copy</span>
+  </div>
+  <div style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;color:#2c3f49;padding:2px 7px;border-radius:4px">CTABand.astro</code></div>
+  <div class="vsgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+    <div style="background:#ecf6f6;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#0a7886;margin-bottom:5px">In the wire</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Navy band, &ldquo;Get in the water&rdquo;, one orange CTA &ldquo;Book your first session&rdquo;. Plus the new hatch-band lead-in and a kraken watermark.</div></div>
+    <div style="background:#f6f9fa;border-radius:8px;padding:12px 14px"><div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px;color:#5d7480;margin-bottom:5px">In the code</div><div style="font-size:13.5px;line-height:1.5;color:#2c3f49">Navy band, &ldquo;Ready to get in the water?&rdquo;, two CTAs — &ldquo;Book a lesson&rdquo; + &ldquo;Team tryouts&rdquo;. Flat navy, no seam or watermark.</div></div>
+  </div>
+  <div class="callout" style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:13px 15px;margin-top:12px">
+    <div style="font-family:'Barlow Semi Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#2fd0e0;margin-bottom:5px">Action for devs</div>
+    <ul style="font-size:14px;line-height:1.55;margin:0;padding-left:18px">
+      <li><strong>Copy:</strong> settle the headline and button labels. The code's two-CTA split (Book + Tryouts) is useful — keep it unless you want a single focused CTA.</li>
+      <li><strong>Gap:</strong> add the seam-hatch divider + kraken watermark (next section).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== BACKGROUND TREATMENTS ===== -->
+<h2 style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:24px;letter-spacing:-.01em;color:#242b6e;margin:40px 0 6px;padding-bottom:8px;border-bottom:2px solid #f38f1f">Background treatments to add</h2>
+<p style="font-size:15px;line-height:1.6;color:#2c3f49;margin:12px 0 0">Two devices, applied only where a light section meets a dark one. On the homepage that's two seams: <strong>into Coaches</strong> (after the white Tracks) and <strong>into the final CTA</strong> (after the white FAQ). Rule of thumb: one divider + one texture per seam, never stacked.</p>
+
+<!-- A: hatch -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #f38f1f;border-radius:10px;padding:20px 22px;margin:16px 0">
+  <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:19px;color:#242b6e">A · Hatch-band divider</div>
+  <p style="font-size:14px;line-height:1.55;color:#2c3f49;margin:8px 0 0">A 44px band reusing the hero's 45° stripe, placed immediately before each dark section. Cleanest as a tiny presentational component dropped into <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;padding:1px 6px;border-radius:4px">index.astro</code>.</p>
+  <pre style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:14px 16px;margin:12px 0 0;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6"><span style="color:#9fb8c3">/* new: components/sections/SeamHatch.astro */</span>
+&lt;div class="seam-hatch" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;style&gt;
+  .seam-hatch {
+    height: 44px;
+    background: repeating-linear-gradient(
+      45deg, var(--hatch-a) 0 11px, var(--hatch-b) 11px 22px);
+  }
+&lt;/style&gt;
+
+<span style="color:#9fb8c3">/* index.astro — place before each dark section */</span>
+&lt;SeamHatch /&gt; &lt;CoachesGrid ... /&gt;
+&lt;SeamHatch /&gt; &lt;CTABand ... /&gt;</pre>
+</div>
+
+<!-- B: watermark -->
+<div class="card" style="background:#fff;border:1px solid #d7e0e5;border-left:4px solid #f38f1f;border-radius:10px;padding:20px 22px;margin:16px 0">
+  <div style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:19px;color:#242b6e">B · Kraken watermark</div>
+  <p style="font-size:14px;line-height:1.55;color:#2c3f49;margin:8px 0 0">Oversized <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#eef3f5;padding:1px 6px;border-radius:4px">kraken-white.png</code> bleeding off-edge at very low opacity — the same trick the hero already uses. Add to the dark sections only (Coaches bottom-left ~.05, Final CTA right ~.06).</p>
+  <pre style="background:#0e1330;color:#eaf3f6;border-radius:8px;padding:14px 16px;margin:12px 0 0;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6"><span style="color:#9fb8c3">/* on the dark section root */</span>
+.coaches--dark { position: relative; overflow: hidden; }
+
+.coaches--dark::after {            <span style="color:#9fb8c3">/* or an &lt;Image&gt; el */</span>
+  content: "";
+  position: absolute;
+  left: -80px; bottom: -80px;
+  width: 340px; height: 340px;
+  background: url('/kraken-white.png') center/contain no-repeat;
+  opacity: .05;
+  pointer-events: none;
+}
+<span style="color:#9fb8c3">/* keep section content above it: */</span>
+.coaches--dark .container { position: relative; z-index: 1; }</pre>
+  <p style="font-size:13px;line-height:1.55;color:#5d7480;margin:12px 0 0">Note: the stripe navies <code style="font-family:'JetBrains Mono',monospace;font-size:12px">#1a2150 / #26306c</code> aren't in <code style="font-family:'JetBrains Mono',monospace;font-size:12px">tokens/colors.css</code> yet — add <code style="font-family:'JetBrains Mono',monospace;font-size:12px">--hatch-a / --hatch-b</code> there so the seam is themeable.</p>
+</div>
+
+<!-- ===== PUNCH LIST ===== -->
+<h2 style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;font-size:24px;letter-spacing:-.01em;color:#242b6e;margin:40px 0 6px;padding-bottom:8px;border-bottom:2px solid #242b6e">Punch list for the agents</h2>
+<div style="border:1px solid #d7e0e5;border-radius:10px;overflow:hidden;margin-top:16px">
+  <div style="display:grid;grid-template-columns:1fr;font-size:14px;line-height:1.5">
+    <div style="display:flex;gap:12px;padding:11px 16px;background:#f6f9fa;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:2px 9px">VERIFY</span><span style="color:#2c3f49">Stats &amp; Tracks copy match <code style="font-family:'JetBrains Mono',monospace;font-size:12px">data/stats.ts</code> · <code style="font-family:'JetBrains Mono',monospace;font-size:12px">data/tracks.ts</code></span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c26a09;background:#fff0db;border-radius:999px;padding:2px 9px">BUILD</span><span style="color:#2c3f49">New <code style="font-family:'JetBrains Mono',monospace;font-size:12px">MissionBand.astro</code>, insert after StatsBand</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;background:#f6f9fa;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:2px 9px">DECIDE</span><span style="color:#2c3f49">Coaches: compact vs full bios · align heading</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:2px 9px">DECIDE</span><span style="color:#2c3f49">Testimonials: single-navy quote vs 3-up paper grid</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;background:#f6f9fa;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c41e6f;background:#fbe3ef;border-radius:999px;padding:2px 9px">DECIDE</span><span style="color:#2c3f49">Location vs service-area band(s) on home</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c26a09;background:#fff0db;border-radius:999px;padding:2px 9px">TWEAK</span><span style="color:#2c3f49">FAQ heading + toggle accent · Final CTA headline + labels</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;background:#f6f9fa;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#c26a09;background:#fff0db;border-radius:999px;padding:2px 9px">BUILD</span><span style="color:#2c3f49">Seam-hatch divider + kraken watermark on Coaches &amp; Final CTA · add <code style="font-family:'JetBrains Mono',monospace;font-size:12px">--hatch-a/b</code> tokens</span></div>
+    <div style="display:flex;gap:12px;padding:11px 16px;align-items:center"><span style="flex:none;font-family:'Barlow Semi Condensed';font-weight:700;font-size:11px;color:#0a7886;background:#d6f5fa;border-radius:999px;padding:2px 9px">DONE</span><span style="color:#2c3f49">Hero — wire synced to as-built, no action</span></div>
+  </div>
+</div>
+
+<p style="font-size:13px;line-height:1.55;color:#5d7480;margin:26px 0 0;padding-top:14px;border-top:1px solid #d7e0e5">Scope: homepage only, per request. Header, footer, nav mega-menu, and the intro splash were not diffed in depth here — the codebase intro (<code style="font-family:'JetBrains Mono',monospace;font-size:12px">BrandIntro.astro</code>, kraken flies to header) is more elaborate than the wire's and can stay. Flag if you want the inner pages (lessons, about, coaches, team, FAQ) diffed next.</p>
+
+</td></tr></tbody>
+<tfoot><tr><td class="ftr-space"></td></tr></tfoot>
+</table>
+</main>
+</x-dc>
+</body>
+</html>
