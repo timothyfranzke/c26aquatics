@@ -53,6 +53,7 @@ export function sportsOrganizationSchema() {
     description: site.description,
     sport: 'Swimming',
     address: postalAddress(),
+    ...(site.place.mapsUrl ? { hasMap: site.place.mapsUrl } : {}),
     areaServed: areaServed(),
     sameAs: sameAs(),
     contactPoint: {

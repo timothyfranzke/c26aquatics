@@ -19,13 +19,23 @@ export const site = {
     phoneDisplay: '(913) 555-0100',
   },
 
-  // TODO: confirm physical address for PostalAddress schema
+  // Physical home — inside the Bluhawk development in south Overland Park.
   address: {
-    streetAddress: '',
+    streetAddress: '16201 Shawnee Dr Suite 126',
     addressLocality: 'Overland Park',
     addressRegion: 'KS',
-    postalCode: '66210',
+    postalCode: '66223',
     addressCountry: 'US',
+  },
+
+  // Venue context surfaced in the LocationBand + org JSON-LD.
+  place: {
+    venue: 'Bluhawk',
+    amenities: ['Indoor pool', 'Sauna'],
+    mapsUrl:
+      'https://www.google.com/maps/search/?api=1&query=Bluhawk+16201+Shawnee+Dr+Suite+126+Overland+Park+KS+66223',
+    // TODO: confirm full weekly hours with the client (Google shows "Closes 8 PM").
+    hours: '',
   },
 
   // TODO: confirm real social handles
