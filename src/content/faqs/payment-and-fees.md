@@ -6,4 +6,4 @@ surfaces:
 order: 11
 ---
 
-Lesson sessions are billed up front for the session block. Team membership is billed monthly and includes practice time, coaching, and standard equipment use; USA Swimming registration and meet entry fees are billed separately as they come up. Current pricing and the booking system live on our **Book Now** page — pricing is reviewed and posted at the start of each season.
+Team membership is billed monthly and includes practice time, coaching, and onsite functional strength, plyometrics, and injury-prevention training. There's a **$100 annual placement fee** per swimmer; USA Swimming registration and meet entry fees are billed separately as they come up. There are no mandatory fundraising fees or parent hours. Current pricing for each training group is listed on the **Team** page.

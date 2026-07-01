@@ -16,11 +16,11 @@ interface Props {
 const {
   heading = 'Proudly serving the KC metro',
   subtitle = 'One pool, one staff — drawing swimmers from across the Kansas City suburbs.',
-  ctaLabel = 'See where we serve',
-  ctaHref = '/about#service-area',
+  ctaLabel = 'Explore the team',
+  ctaHref = '/team',
 } = Astro.props;
 ---
-<section class="service" aria-labelledby="service-title">
+<section id="service-area" class="service" aria-labelledby="service-title">
   <div class="container service__inner">
     <header class="service__head">
       <h2 id="service-title" class="service__heading">{heading}</h2>

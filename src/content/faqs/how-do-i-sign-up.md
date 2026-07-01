@@ -7,4 +7,4 @@ surfaces:
 order: 4
 ---
 
-Use the **Book Now** button anywhere on the site. You'll be taken to our booking system where you can pick a lesson time, request a team evaluation, or get on the waitlist for a full session. New families typically start with a free water evaluation so we can place your swimmer in the right group — reach out if you'd prefer to talk through options before booking.
+Use the **Join the Team** button anywhere on the site to request a team evaluation and get started. New families begin with an evaluation so our coaches can place your swimmer in the right training group — reach out if you'd prefer to talk through options first. Team evaluations for the coming season run **August 22–26**.

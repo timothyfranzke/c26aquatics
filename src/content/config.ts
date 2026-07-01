@@ -44,24 +44,13 @@ const trainingGroups = defineCollection({
   }),
 });
 
-const lessonTracks = defineCollection({
-  type: 'content',
-  schema: z.object({
-    name: z.string(),
-    ageRange: z.string(),
-    format: z.enum(['group', 'semi-private', 'private']),
-    description: z.string(),
-    order: z.number(),
-  }),
-});
-
 const faqs = defineCollection({
   type: 'content',
   schema: z.object({
     question: z.string(),
-    category: z.enum(['team', 'lessons', 'logistics', 'general']),
+    category: z.enum(['team', 'logistics', 'general']),
     surfaces: z
-      .array(z.enum(['home', 'team', 'swim-lessons', 'faq']))
+      .array(z.enum(['home', 'team', 'faq']))
       .min(1),
     order: z.number(),
   }),
@@ -81,7 +70,6 @@ const testimonials = defineCollection({
 export const collections = {
   coaches,
   'training-groups': trainingGroups,
-  'lesson-tracks': lessonTracks,
   faqs,
   testimonials,
 };

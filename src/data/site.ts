@@ -9,7 +9,7 @@ export const site = {
   shortName: 'C26',
   tagline: 'Become a stronger swimmer.',
   description:
-    'C26 Aquatics is a Kansas City–area competitive swim team and learn-to-swim program. Train with certified coaches across the KC metro.',
+    'C26 Aquatics is a Kansas City–area competitive swim team — one pool, one coaching staff, one standard. Train with certified coaches across the KC metro.',
   url: 'https://c26aquatics.com',
 
   contact: {
@@ -49,10 +49,10 @@ export const site = {
    * Update once the booking system / public URLs are confirmed.
    */
   booking: {
-    // TODO: real URL for team tryouts / interest form
+    // TODO: real registration URL — the Stripe / product link for team
+    // evaluations that Robbie still owes. Wired to the "Join the Team" CTAs
+    // and the /team evaluations section.
     team: 'https://example.com/c26-team-tryout',
-    // TODO: real URL for lesson scheduling
-    lessons: 'https://example.com/c26-lessons',
   },
 
   // Compliance / governance link

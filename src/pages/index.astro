@@ -16,7 +16,6 @@ import LocationBand from '@components/sections/LocationBand.astro';
 import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
-import { site } from '@data/site';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 
 const orgSchema = sportsOrganizationSchema();
@@ -35,9 +34,9 @@ const orgSchema = sportsOrganizationSchema();
     <Hero
       variant="home"
       title="Become a <span class=&quot;hero-accent-magenta&quot;>stronger</span> swimmer"
-      subtitle="Competitive team training and learn-to-swim lessons in the Kansas City metro."
-      primaryCta={{ label: 'Book a session', href: site.booking.lessons, external: true }}
-      secondaryCta={{ label: 'Explore programs', href: '#tracks' }}
+      subtitle="Competitive swim training in the Kansas City metro — one pool, one coaching staff, one standard."
+      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      secondaryCta={{ label: 'Explore training groups', href: '#tracks' }}
     />
 
     <StatsBand />
@@ -71,8 +70,8 @@ const orgSchema = sportsOrganizationSchema();
     <CTABand
       title="Get in the <span class='hero-accent accent'>water</span>"
       watermark="right"
-      primaryCta={{ label: 'Book your first session', href: site.booking.lessons, external: true }}
-      secondaryCta={{ label: 'Team tryouts', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      secondaryCta={{ label: 'Read our approach', href: '/our-approach' }}
     />
   </main>
   <Footer />

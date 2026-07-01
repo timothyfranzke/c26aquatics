@@ -1,6 +1,5 @@
 ---
 import { primaryNav } from '@data/nav';
-import { site } from '@data/site';
 import Button from '@components/ui/Button.astro';
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -58,8 +57,8 @@ function isCurrent(href: string): boolean {
     </nav>
 
     <div class="c26-mm__cta">
-      <Button href={site.booking.lessons} variant="primary" size="lg" full external>
-        Book Now
+      <Button href="/team" variant="primary" size="lg" full>
+        Join the Team
       </Button>
     </div>
   </div>

@@ -79,23 +79,6 @@ export function sportsTeamSchema() {
   };
 }
 
-/** Service for /swim-lessons */
-export function lessonsServiceSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    serviceType: 'Swim Lessons',
-    name: `${site.name} Swim Lessons`,
-    url: absUrl('/swim-lessons'),
-    provider: { '@id': `${SITE_URL}/#organization` },
-    areaServed: areaServed(),
-    audience: {
-      '@type': 'PeopleAudience',
-      suggestedMinAge: 0.5,
-    },
-  };
-}
-
 interface CoachInput {
   slug: string;
   name: string;
@@ -125,13 +108,13 @@ export function coachesListSchema(coaches: CoachInput[]) {
   };
 }
 
-/** AboutPage for /about */
+/** AboutPage for /our-story */
 export function aboutPageSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
-    name: `About ${site.name}`,
-    url: absUrl('/about'),
+    name: `Our Story — ${site.name}`,
+    url: absUrl('/our-story'),
     about: { '@id': `${SITE_URL}/#organization` },
   };
 }

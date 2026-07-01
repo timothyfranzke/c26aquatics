@@ -7,7 +7,6 @@ import ConsentBanner from '@components/layout/ConsentBanner.astro';
 import Hero from '@components/sections/Hero.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import CTABand from '@components/sections/CTABand.astro';
-import { site } from '@data/site';
 import {
   sportsOrganizationSchema,
   coachesListSchema,
@@ -59,8 +58,8 @@ const coachListSchema = coachesListSchema(coachesForSchema);
 
     <CTABand
       title="Train with the <span class='hero-accent accent'>best</span>"
-      primaryCta={{ label: 'Start tryouts', href: site.booking.team, external: true }}
-      secondaryCta={{ label: 'Book a lesson', href: site.booking.lessons, external: true }}
+      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      secondaryCta={{ label: 'Read our approach', href: '/our-approach' }}
     />
   </main>
   <Footer />

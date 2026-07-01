@@ -5,6 +5,25 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Round 2: /about split into /our-story + /our-approach; lessons pages retired.
+[[redirects]]
+  from = "/about"
+  to = "/our-story"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/swim-lessons"
+  to = "/team"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/adult-multisport"
+  to = "/team"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

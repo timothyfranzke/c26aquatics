@@ -1,9 +1,9 @@
 ---
-question: "Where do parents wait during practice or lessons?"
+question: "Where do parents wait during practice?"
 category: "logistics"
 surfaces:
   - "faq"
 order: 12
 ---
 
-We have a parent viewing area with seating where you can watch the entire practice or lesson. For younger swimmers and Parent & Tot families, a caregiver gets in the water — full deck access on those days. For older lessons and team practices, we ask parents to stay in the viewing area so coaches can focus on the swimmers in the pool. Free parking on-site.
+We have a dedicated parent viewing area with seating where you can watch the entire practice. Our private facility has its own entrance and parking, so drop-off and pick-up are simple. During practice we ask parents to stay in the viewing area so coaches can focus on the swimmers in the pool. Free parking on-site.
