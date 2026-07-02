@@ -7,7 +7,7 @@ import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
 import StatsBand from '@components/sections/StatsBand.astro';
 import MissionBand from '@components/sections/MissionBand.astro';
-import DifferenceBand from '@components/sections/DifferenceBand.astro';
+import DifferenceMatrix from '@components/sections/DifferenceMatrix.astro';
 import TracksLadder from '@components/sections/TracksLadder.astro';
 import SeamHatch from '@components/ui/SeamHatch.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
@@ -52,22 +52,9 @@ const orgSchema = sportsOrganizationSchema();
       cta={{ label: 'Read our story', href: '/our-story' }}
     />
 
-    <DifferenceBand
-      pillars={[
-        {
-          title: 'One home. One pool.',
-          body: 'We own our facility — every swimmer has a true home base and trains to one standard, not a rotating set of rented pools.',
-        },
-        {
-          title: 'Consistent coaching',
-          body: 'The same coaching staff who know your swimmer, their goals, and how they learn best — season after season.',
-        },
-        {
-          title: 'Individualized development',
-          body: 'Training tailored to age, ability, and long-term growth, with excellent coach-to-swimmer ratios for real feedback.',
-        },
-      ]}
-      cta={{ label: 'See the full comparison', href: '/our-approach' }}
+    <DifferenceMatrix
+      condensed
+      cta={{ label: 'See the full comparison', href: '/our-approach#difference' }}
     />
 
     <TracksLadder />

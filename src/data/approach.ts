@@ -146,5 +146,28 @@ export const differenceRows: DifferenceRow[] = [
   },
 ];
 
+/**
+ * Four punchy head-to-head pairs for the homepage teaser. Condensed from
+ * differenceRows; the full nine-row comparison lives on /our-approach#difference.
+ */
+export const condensedDifferenceRows: DifferenceRow[] = [
+  {
+    traditional: 'Multiple pool locations and changing practice sites',
+    c26: 'One home. One pool. One standard — we own our facility.',
+  },
+  {
+    traditional: 'Different coaches from practice to practice',
+    c26: 'Consistent staff who know your swimmer and how they learn.',
+  },
+  {
+    traditional: 'Generalized plans for large groups',
+    c26: 'Individualized development tailored to age and ability.',
+  },
+  {
+    traditional: 'Swimmers wait months for move-ups',
+    c26: 'Move up when ready — no waiting for a calendar date.',
+  },
+];
+
 export const differenceSummary =
   "We don't believe in simply putting swimmers through yards. We believe in developing athletes. We coach the person first and the swimmer second. We prioritize relationships, consistency, and intentional progress. Our goal is to create confident, resilient young people who learn discipline, accountability, and a love for the process.";

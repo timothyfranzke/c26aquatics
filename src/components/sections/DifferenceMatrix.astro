@@ -1,12 +1,14 @@
 ---
 /**
- * DifferenceMatrix — the "Traditional Swim Clubs vs C26 Aquatics" comparison.
- * Two-column editorial table on desktop; on narrow screens each row stacks into
- * a labeled pair. Data from src/data/approach.ts.
+ * DifferenceMatrix — the "Traditional Swim Clubs vs C26 Aquatics" comparison,
+ * rendered as a head-to-head pair of cards: a muted "Traditional" card (✕
+ * badges) beside a navy C26 card with a teal radial glow (✓ badges). Stacks to
+ * one column under ~720px. Data from src/data/approach.ts.
  */
 import {
   differenceIntro,
   differenceRows,
+  condensedDifferenceRows,
   differenceSummary,
   type DifferenceRow,
 } from '@data/approach';
@@ -18,44 +20,72 @@ interface Props {
   rows?: DifferenceRow[];
   summary?: string;
   tagline?: string;
+  /** Homepage teaser: 4 rows, no intro/summary prose, optional CTA link. */
+  condensed?: boolean;
+  cta?: { label: string; href: string };
+  /** Anchor id + deep-link target. Defaults to "difference". */
+  id?: string;
 }
 
 const {
   eyebrow = 'Why C26',
   heading = 'The C26 difference',
-  intro = differenceIntro,
-  rows = differenceRows,
+  intro,
+  rows,
   summary = differenceSummary,
   tagline = 'One Home. One Pool. One Standard.',
+  condensed = false,
+  cta,
+  id = 'difference',
 } = Astro.props;
+
+const displayRows = rows ?? (condensed ? condensedDifferenceRows : differenceRows);
+const introText = intro ?? (condensed ? undefined : differenceIntro);
 ---
-<section class="diffmatrix" aria-labelledby="diffmatrix-title">
+<section id={id} class:list={['diffmatrix', { 'diffmatrix--condensed': condensed }]} aria-labelledby="diffmatrix-title">
   <div class="container">
     <p class="diffmatrix__eyebrow">{eyebrow}</p>
     <h2 id="diffmatrix-title" class="diffmatrix__heading">{heading}</h2>
-    {intro && <p class="diffmatrix__intro">{intro}</p>}
+    {introText && <p class="diffmatrix__intro">{introText}</p>}
 
-    <div class="dm" role="table" aria-label="Traditional swim clubs compared with C26 Aquatics">
-      <div class="dm__head dm__head--trad" role="columnheader">Traditional Swim Clubs</div>
-      <div class="dm__head dm__head--c26" role="columnheader">C26 Aquatics</div>
-      {rows.map((r) => (
-        <Fragment>
-          <div class="dm__cell dm__cell--trad" role="cell">
-            <span class="dm__label">Traditional Swim Clubs</span>
-            {r.traditional}
-          </div>
-          <div class="dm__cell dm__cell--c26" role="cell">
-            <span class="dm__label">C26 Aquatics</span>
-            <span class="dm__check" aria-hidden="true">✓</span>
-            <span>{r.c26}</span>
-          </div>
-        </Fragment>
-      ))}
+    <div class="h2h">
+      <!-- Traditional swim clubs -->
+      <div class="h2h__card h2h__card--trad">
+        <p class="h2h__label h2h__label--trad">Traditional Swim Clubs</p>
+        <ul class="h2h__list" aria-label="How traditional swim clubs operate">
+          {displayRows.map((r) => (
+            <li class="h2h__item">
+              <span class="h2h__badge h2h__badge--x" aria-hidden="true">✕</span>
+              <span class="h2h__text h2h__text--trad">{r.traditional}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- C26 Aquatics -->
+      <div class="h2h__card h2h__card--c26">
+        <span class="h2h__glow" aria-hidden="true"></span>
+        <p class="h2h__label h2h__label--c26">C26 Aquatics</p>
+        <ul class="h2h__list" aria-label="How C26 Aquatics operates">
+          {displayRows.map((r) => (
+            <li class="h2h__item">
+              <span class="h2h__badge h2h__badge--check" aria-hidden="true">✓</span>
+              <span class="h2h__text h2h__text--c26">{r.c26}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
 
     <div class="dm__summary">
-      <p class="dm__summary-text">{summary}</p>
+      {!condensed && <p class="dm__summary-text">{summary}</p>}
       <p class="dm__tagline">{tagline}</p>
+      {cta && (
+        <a href={cta.href} class="dm__cta">
+          {cta.label}
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      )}
     </div>
   </div>
 </section>
@@ -64,14 +94,15 @@ const {
   .diffmatrix {
     background: var(--surface);
     padding: var(--section-y) 0;
+    scroll-margin-top: 96px;
   }
   .diffmatrix__eyebrow {
     font-family: var(--font-subhead);
-    font-weight: var(--fw-semibold);
+    font-weight: var(--fw-bold);
     text-transform: uppercase;
     letter-spacing: var(--ls-eyebrow);
     font-size: var(--fs-eyebrow);
-    color: var(--magenta-500);
+    color: var(--teal-600);
     margin: 0;
   }
   .diffmatrix__heading {
@@ -92,65 +123,104 @@ const {
     max-width: 680px;
   }
 
-  .dm {
+  /* Head-to-head cards */
+  .h2h {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1px;
+    gap: var(--space-6);
+    align-items: stretch;
     margin-top: 36px;
-    background: var(--border);
-    border: 1px solid var(--border);
+  }
+  .h2h__card {
     border-radius: var(--r-lg);
+    padding: 26px 26px 30px;
+  }
+  .h2h__card--trad {
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+  }
+  .h2h__card--c26 {
+    background: var(--navy-700);
+    position: relative;
     overflow: hidden;
   }
-  .dm__head {
+  .h2h__glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--teal-400) 30%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .h2h__label {
     font-family: var(--font-display);
     font-weight: var(--fw-bold);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    font-size: 16px;
-    padding: var(--space-4) var(--space-5);
+    font-size: 17px;
+    margin: 0 0 18px;
+    position: relative;
   }
-  .dm__head--trad {
-    background: var(--surface-alt);
+  .h2h__label--trad {
     color: var(--text-muted);
   }
-  .dm__head--c26 {
-    background: var(--navy-700);
-    color: var(--white);
-  }
-  .dm__cell {
-    padding: var(--space-4) var(--space-5);
-    font-size: 15px;
-    line-height: 1.5;
-    background: var(--surface);
-  }
-  .dm__cell--trad {
-    color: var(--text-muted);
-  }
-  .dm__cell--c26 {
-    color: var(--text-strong);
-    background: var(--teal-50, #eefbfa);
-    display: flex;
-    gap: var(--space-2);
-    align-items: flex-start;
-  }
-  .dm__check {
-    color: var(--teal-600);
-    font-weight: var(--fw-bold);
-    flex: none;
-    line-height: 1.5;
-  }
-  .dm__label {
-    display: none;
-    font-family: var(--font-subhead);
-    font-weight: var(--fw-semibold);
-    text-transform: uppercase;
-    letter-spacing: var(--ls-eyebrow);
-    font-size: 11px;
-    color: var(--teal-700);
-    margin-bottom: var(--space-1);
+  .h2h__label--c26 {
+    color: var(--teal-400);
   }
 
+  .h2h__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+  }
+  .h2h__item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .h2h__badge {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--r-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-weight: var(--fw-black);
+  }
+  .h2h__badge--x {
+    background: var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .h2h__badge--check {
+    background: var(--teal-400);
+    color: var(--navy-900);
+    font-size: 12px;
+  }
+  .h2h__text {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .h2h__text--trad {
+    color: var(--text-muted);
+  }
+  .h2h__text--c26 {
+    color: var(--text-on-dark);
+  }
+
+  /* Summary + tagline */
   .dm__summary {
     margin-top: var(--space-8);
     max-width: 760px;
@@ -170,26 +240,31 @@ const {
     color: var(--navy-700);
     margin: var(--space-5) 0 0;
   }
+  .dm__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: var(--teal-700);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition:
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+  .dm__cta:hover {
+    color: var(--navy-700);
+    border-bottom-color: var(--teal-500);
+  }
 
   @media (max-width: 720px) {
-    .dm {
+    .h2h {
       grid-template-columns: 1fr;
-    }
-    .dm__head {
-      display: none;
-    }
-    .dm__cell {
-      display: flex;
-      flex-direction: column;
-    }
-    .dm__cell--c26 {
-      flex-direction: column;
-    }
-    .dm__cell--c26 .dm__check {
-      display: none;
-    }
-    .dm__label {
-      display: block;
     }
   }
 </style>
