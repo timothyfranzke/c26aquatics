@@ -1,0 +1,121 @@
+---
+/**
+ * NumberedPrinciples — the four commitments of the C26 method as big-number
+ * principle cards (2×2 on desktop, single column under ~860px). Replaces the
+ * old "Train with purpose" prose wall on /our-approach. Data from
+ * src/data/approach.ts. Numbers 01/02 render teal, 03/04 orange (by index).
+ */
+import { principles, type Principle } from '@data/approach';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  items?: Principle[];
+}
+
+const {
+  eyebrow = 'The C26 method',
+  heading = 'Train with purpose',
+  intro = 'Every practice has a purpose. Every set has an objective. Every season has a plan. Our whole philosophy comes down to four commitments we make to every swimmer.',
+  items = principles,
+} = Astro.props;
+---
+<section class="principles" aria-labelledby="principles-title">
+  <div class="container">
+    <p class="principles__eyebrow">{eyebrow}</p>
+    <h2 id="principles-title" class="principles__heading">{heading}</h2>
+    <p class="principles__intro">{intro}</p>
+
+    <ul class="principles__grid">
+      {items.map((p, i) => (
+        <li class="principle" data-accent={i < 2 ? 'teal' : 'orange'}>
+          <span class="principle__num" aria-hidden="true">{p.n}</span>
+          <div class="principle__body">
+            <h3 class="principle__title">{p.title}</h3>
+            <p class="principle__text">{p.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .principles {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .principles__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .principles__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+  }
+  .principles__intro {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0;
+    max-width: 680px;
+  }
+
+  .principles__grid {
+    list-style: none;
+    margin: 56px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px 56px;
+  }
+  .principle {
+    display: flex;
+    gap: 22px;
+  }
+  .principle__num {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: 64px;
+    line-height: 0.8;
+    color: var(--teal-400);
+  }
+  .principle[data-accent='orange'] .principle__num {
+    color: var(--orange-500);
+  }
+  .principle__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 24px;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-2);
+  }
+  .principle__text {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .principles__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

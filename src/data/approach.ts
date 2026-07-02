@@ -13,6 +13,52 @@ export const vision =
 
 export const motto = 'Inspiring Potential. Pursuing Purpose. Achieving Success.';
 
+export interface Principle {
+  /** Display number, e.g. "01". Decorative — the real label lives in `title`. */
+  n: string;
+  title: string;
+  body: string;
+}
+
+/**
+ * The four commitments behind the C26 method. Rendered as numbered principle
+ * cards by NumberedPrinciples.astro; condensed from the page's "Train with
+ * purpose" prose.
+ */
+export const principles: Principle[] = [
+  {
+    n: '01',
+    title: 'Train with purpose',
+    body: "We prioritize quality over quantity — technique, efficiency, and movement patterns. The goal isn't to out-yard everyone else; it's to maximize every yard we swim.",
+  },
+  {
+    n: '02',
+    title: 'Develop for the long term',
+    body: 'Science-backed periodization lets swimmers grow progressively. Rather than chasing early wins at 11, 12, or 13, we build toward full potential at 16–18 and the collegiate level.',
+  },
+  {
+    n: '03',
+    title: 'Peak when it matters most',
+    body: 'We balance training stress, recovery, strength, and mobility so athletes perform at their best when it counts — while reducing the risk of burnout and overuse injury.',
+  },
+  {
+    n: '04',
+    title: 'Love the process',
+    body: "Success isn't only times on a scoreboard. It's confidence, resilience, discipline, and friendships — healthy young people who love the sport for life.",
+  },
+];
+
+/**
+ * Coach Robbie's marquee open-water results, shown as a credential chip row in
+ * the "Beyond the pool" band on /our-approach. Condensed from the page prose.
+ */
+export const openWaterCredentials: string[] = [
+  'Top-5 · Open Water Zones',
+  'National 5K Collegiate',
+  'Pro Triathlon',
+  'English Channel',
+];
+
 export interface CoreValue {
   title: string;
   body: string;
