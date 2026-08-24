@@ -11,6 +11,8 @@ export interface Track {
   desc: string;
   cta: string;
   href: string;
+  // Mirrors the group's `status` frontmatter; 'full' renders a marker.
+  status?: 'open' | 'full';
 }
 
 export const tracks: Track[] = [
@@ -29,6 +31,7 @@ export const tracks: Track[] = [
     desc: 'Learn to Train — the first stage of structured training and a full understanding of all four strokes.',
     cta: 'View group →',
     href: '/team#novice-age-group',
+    status: 'full',
   },
   {
     num: '03',
@@ -37,6 +40,7 @@ export const tracks: Track[] = [
     desc: 'Train to Improve — refined technique, IM development, and intentional performance work.',
     cta: 'View group →',
     href: '/team#advanced-age-group',
+    status: 'full',
   },
   {
     num: '04',
@@ -65,7 +69,7 @@ export const tracks: Track[] = [
   {
     num: '07',
     title: 'Senior Elite',
-    age: '13–18 yrs',
+    age: '11–18 yrs',
     desc: 'Train to Perform — the pinnacle of the pathway, aimed at the highest levels of senior and collegiate swimming.',
     cta: 'View group →',
     href: '/team#senior-elite',

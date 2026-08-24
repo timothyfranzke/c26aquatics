@@ -38,6 +38,11 @@ const trainingGroups = defineCollection({
     monthlyCost: z.number(), // USD
     costPerHour: z.number(), // USD, stored for display
     commitmentLevel: z.enum(['developmental', 'competitive', 'elite']),
+    // Roster availability. `full` swaps the group's registration path for an
+    // email-first availability check; anything else renders as open.
+    status: z.enum(['open', 'full']).default('open'),
+    // Optional override for the availability callout copy shown when full.
+    statusNote: z.string().optional(),
     scheduleOptions: z
       .array(
         z.object({

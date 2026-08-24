@@ -8,6 +8,17 @@ export interface Stat {
   label: string;
 }
 
+/**
+ * Growth-claim band (GrowthBand) between the stats ticker and mission band.
+ * Bump `count` and `updated` as Robbie reports new roster numbers — the
+ * number is live text, never artwork.
+ */
+export const growth = {
+  count: 113,
+  label: 'swimmers and climbing',
+  updated: 'August 2026',
+};
+
 export const homeStats: Stat[] = [
   { value: '35+', label: 'years coaching experience' },
   { value: '500+', label: 'swimmers coached' },

@@ -7,6 +7,7 @@ monthlyHours: 15.5
 monthlyCost: 220
 costPerHour: 14.19
 commitmentLevel: "competitive"
+status: "full"
 order: 3
 scheduleOptions:
   - label: "Option 1"
