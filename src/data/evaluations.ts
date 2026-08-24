@@ -10,7 +10,7 @@
  *   Junior      → Junior Olympic
  */
 
-export const evaluationDates = 'August 22–26';
+export const evaluationDates = 'August 24–31';
 
 export const teamStructureNotes: string[] = [
   '2–3 coaches on deck for every group, for a smaller coach-to-swimmer ratio.',

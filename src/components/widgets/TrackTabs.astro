@@ -12,6 +12,8 @@
  * Pure UI primitive — callers shape collection entries into the `tracks` prop;
  * the widget never touches `astro:content`.
  */
+import Button from '@components/ui/Button.astro';
+
 interface MetaItem {
   label: string;
   value: string;
@@ -44,6 +46,10 @@ interface Track {
   meta?: MetaItem[];
   scheduleOptions?: ScheduleOption[];
   coaches?: TrackCoach[];
+  // 'full' renders a pill on the tab and an availability callout in the panel.
+  status?: 'open' | 'full';
+  statusNote?: string;
+  availabilityHref?: string;
 }
 
 interface Props {
@@ -81,7 +87,10 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
             {track.eyebrowText && (
               <span class="tracks__tab-eyebrow">{track.eyebrowText}</span>
             )}
-            <span class="tracks__tab-name">{track.name}</span>
+            <span class="tracks__tab-name">
+              {track.name}
+              {track.status === 'full' && <span class="tracks__pill-full">Full</span>}
+            </span>
           </button>
         ))}
       </div>
@@ -98,6 +107,22 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
             tabindex="0"
             data-panel={track.slug}
           >
+            {track.status === 'full' && (
+              <div class="tracks__availability" role="note">
+                <div class="tracks__availability-copy">
+                  <p class="tracks__availability-title">This group is currently full</p>
+                  <p class="tracks__availability-note">
+                    {track.statusNote ??
+                      'Email us to check availability before registering — we’ll let you know as soon as a spot opens.'}
+                  </p>
+                </div>
+                {track.availabilityHref && (
+                  <Button href={track.availabilityHref} variant="outline" size="sm">
+                    Check availability
+                  </Button>
+                )}
+              </div>
+            )}
             {track.meta && track.meta.length > 0 && (
               <dl class="tracks__meta">
                 {track.meta.map((m) => (
@@ -388,6 +413,47 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
   .tracks__tab-name {
     font-size: 18px;
     line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .tracks__pill-full {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--orange-500);
+    border-radius: var(--r-pill);
+    padding: 2px 8px;
+  }
+
+  .tracks__availability {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--orange-500);
+    border-left-width: 4px;
+    border-radius: var(--r-md);
+  }
+  .tracks__availability-title {
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 13px;
+    color: var(--navy-700);
+  }
+  .tracks__availability-note {
+    margin: var(--space-1) 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-body);
   }
 
   .tracks__panel {

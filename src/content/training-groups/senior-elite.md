@@ -1,6 +1,6 @@
 ---
 name: "Senior Elite"
-ageRange: "13–18 yrs"
+ageRange: "11–18 yrs"
 groupSize: 15
 suggestedPractices: "6–8×/week"
 monthlyHours: 59

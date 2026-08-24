@@ -10,4 +10,4 @@ cta:
   href: "booking.team"
 ---
 
-Use the **Join the Team** button anywhere on the site to request a team evaluation and get started. New families begin with an evaluation so our coaches can place your swimmer in the right training group — reach out if you'd prefer to talk through options first. Team evaluations for the coming season run **August 22–26**.
+Use the **Join the Team** button anywhere on the site to request a team evaluation and get started. New families begin with an evaluation so our coaches can place your swimmer in the right training group — reach out if you'd prefer to talk through options first. Team evaluations for the coming season run **August 24–31**.

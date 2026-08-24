@@ -7,6 +7,7 @@ monthlyHours: 12.75
 monthlyCost: 200
 costPerHour: 15.68
 commitmentLevel: "developmental"
+status: "full"
 order: 2
 scheduleOptions:
   - label: "Option 1"

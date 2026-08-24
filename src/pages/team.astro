@@ -64,11 +64,17 @@ const coachesForGroup = (slug: string) =>
       initials: initialsOf(coach.data.name),
     }));
 
+const availabilityHref = (name: string) =>
+  `mailto:${site.contact.email}?subject=${encodeURIComponent(`${name} availability`)}`;
+
 const tracks = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
   name: entry.data.name,
   eyebrowText: entry.data.ageRange,
   bodyHtml: micromark(entry.body),
+  status: entry.data.status,
+  statusNote: entry.data.statusNote,
+  availabilityHref: availabilityHref(entry.data.name),
   meta: [
     { label: 'Ages', value: entry.data.ageRange },
     { label: 'Group size', value: `${entry.data.groupSize}` },
@@ -84,6 +90,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
 const compareRows = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
   name: entry.data.name,
+  status: entry.data.status,
   ageRange: entry.data.ageRange,
   groupSize: entry.data.groupSize,
   suggestedPractices: entry.data.suggestedPractices,
