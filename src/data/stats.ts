@@ -14,7 +14,7 @@ export interface Stat {
  * number is live text, never artwork.
  */
 export const growth = {
-  count: 113,
+  count: 110,
   label: 'swimmers and climbing',
   updated: 'August 2026',
 };
