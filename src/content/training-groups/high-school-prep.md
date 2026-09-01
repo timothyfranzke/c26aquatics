@@ -8,6 +8,9 @@ monthlyCost: 280
 costPerHour: 6.87
 commitmentLevel: "competitive"
 order: 6
+registration:
+  monthly: "https://momence.com/m/880908"
+  seasonal: "https://momence.com/m/903826"
 scheduleOptions:
   - slots:
       - { day: "Mon", time: "3:30–5:30 PM" }

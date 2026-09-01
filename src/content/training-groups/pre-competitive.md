@@ -8,6 +8,9 @@ monthlyCost: 170
 costPerHour: 18.57
 commitmentLevel: "developmental"
 order: 1
+registration:
+  monthly: "https://momence.com/m/903829"
+  seasonal: "https://momence.com/m/903820"
 scheduleOptions:
   - slots:
       - { day: "Tue", time: "5:00–5:45 PM" }

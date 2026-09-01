@@ -24,8 +24,14 @@ interface ScheduleSlot {
   time: string;
 }
 
+type Availability = 'open' | 'limited' | 'full';
+
 interface ScheduleOption {
   label?: string;
+  // Per-option availability — shown on the option toggle and as a note
+  // under the slots. Independent of group-level `status`.
+  status?: Availability;
+  statusNote?: string;
   slots: ScheduleSlot[];
 }
 
@@ -46,10 +52,14 @@ interface Track {
   meta?: MetaItem[];
   scheduleOptions?: ScheduleOption[];
   coaches?: TrackCoach[];
-  // 'full' renders a pill on the tab and an availability callout in the panel.
-  status?: 'open' | 'full';
+  // 'full' renders a pill on the tab and an email-first availability callout
+  // in the panel; 'limited' renders a pill and a register-soon callout while
+  // keeping registration buttons active.
+  status?: Availability;
   statusNote?: string;
   availabilityHref?: string;
+  // Momence checkout links — hidden when the group is 'full'.
+  registration?: { monthly: string; seasonal: string };
 }
 
 interface Props {
@@ -90,6 +100,9 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
             <span class="tracks__tab-name">
               {track.name}
               {track.status === 'full' && <span class="tracks__pill-full">Full</span>}
+              {track.status === 'limited' && (
+                <span class="tracks__pill-limited">Limited spots</span>
+              )}
             </span>
           </button>
         ))}
@@ -123,6 +136,17 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                 )}
               </div>
             )}
+            {track.status === 'limited' && (
+              <div class="tracks__availability tracks__availability--limited" role="note">
+                <div class="tracks__availability-copy">
+                  <p class="tracks__availability-title">Limited availability</p>
+                  <p class="tracks__availability-note">
+                    {track.statusNote ??
+                      'A few spots remain — register soon to hold your swimmer’s place.'}
+                  </p>
+                </div>
+              </div>
+            )}
             {track.meta && track.meta.length > 0 && (
               <dl class="tracks__meta">
                 {track.meta.map((m) => (
@@ -132,6 +156,26 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                   </div>
                 ))}
               </dl>
+            )}
+            {track.registration && track.status !== 'full' && (
+              <div class="tracks__register">
+                <Button
+                  href={track.registration.monthly}
+                  variant="primary"
+                  size="sm"
+                  external
+                >
+                  Register — Monthly
+                </Button>
+                <Button
+                  href={track.registration.seasonal}
+                  variant="outline"
+                  size="sm"
+                  external
+                >
+                  Register — Seasonal
+                </Button>
+              </div>
             )}
             {track.scheduleOptions && track.scheduleOptions.length > 0 && (
               <div class="tracks__schedule" data-schedule>
@@ -148,23 +192,39 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                         data-sched-tab={oi}
                       >
                         {opt.label ?? `Option ${oi + 1}`}
+                        {opt.status && (
+                          <span
+                            class={`tracks__sched-status tracks__sched-status--${opt.status}`}
+                          >
+                            {opt.status === 'full'
+                              ? 'Full'
+                              : opt.status === 'limited'
+                                ? 'Limited'
+                                : 'Open'}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
                 )}
                 {track.scheduleOptions.map((opt, oi) => (
-                  <ul
-                    class="tracks__slots"
+                  <div
+                    class="tracks__sched-option"
                     data-sched-panel={oi}
                     hidden={oi !== 0}
                   >
-                    {opt.slots.map((slot) => (
-                      <li class="tracks__slot">
-                        <span class="tracks__slot-day">{slot.day}</span>
-                        <span class="tracks__slot-time">{slot.time}</span>
-                      </li>
-                    ))}
-                  </ul>
+                    <ul class="tracks__slots">
+                      {opt.slots.map((slot) => (
+                        <li class="tracks__slot">
+                          <span class="tracks__slot-day">{slot.day}</span>
+                          <span class="tracks__slot-time">{slot.time}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {opt.statusNote && (
+                      <p class="tracks__sched-note">{opt.statusNote}</p>
+                    )}
+                  </div>
                 ))}
               </div>
             )}
@@ -417,7 +477,8 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
     align-items: center;
     gap: var(--space-2);
   }
-  .tracks__pill-full {
+  .tracks__pill-full,
+  .tracks__pill-limited {
     font-family: var(--font-subhead);
     font-weight: var(--fw-semibold);
     font-size: 10px;
@@ -426,6 +487,9 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
     background: var(--orange-500);
     border-radius: var(--r-pill);
     padding: 2px 8px;
+  }
+  .tracks__pill-limited {
+    background: var(--teal-600);
   }
 
   .tracks__availability {
@@ -454,6 +518,15 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
     font-size: 14px;
     line-height: 1.5;
     color: var(--text-body);
+  }
+  .tracks__availability--limited {
+    border-color: var(--teal-600);
+  }
+
+  .tracks__register {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 
   .tracks__panel {
@@ -544,6 +617,40 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
   .tracks__sched-tab[aria-selected='true'] {
     background: var(--navy-700);
     color: var(--white);
+  }
+  .tracks__sched-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: var(--space-2);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .tracks__sched-status::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .tracks__sched-status--full { color: var(--orange-500); }
+  .tracks__sched-status--limited { color: var(--teal-600); }
+  .tracks__sched-status--open { color: var(--success); }
+  /* Selected tab flips to navy — keep the status legible on the dark bg. */
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--full { color: var(--orange-400); }
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--limited { color: var(--teal-400); }
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--open { color: #4fd394; }
+  .tracks__sched-option {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .tracks__sched-option[hidden] { display: none; }
+  .tracks__sched-note {
+    margin: 0;
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    color: var(--teal-700);
   }
   .tracks__slots {
     list-style: none;

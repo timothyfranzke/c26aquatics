@@ -10,7 +10,7 @@ type CommitmentLevel = 'developmental' | 'competitive' | 'elite';
 interface Row {
   slug: string;
   name: string;
-  status?: 'open' | 'full';
+  status?: 'open' | 'limited' | 'full';
   ageRange: string;
   groupSize: number;
   suggestedPractices: string;
@@ -75,6 +75,9 @@ const usd = (n: number) =>
                 <span class="compare__group-name">
                   {row.name}
                   {row.status === 'full' && <span class="compare__full">Full</span>}
+                  {row.status === 'limited' && (
+                    <span class="compare__full compare__limited">Limited</span>
+                  )}
                 </span>
                 <span class="compare__group-level">{levelLabel[row.commitmentLevel]}</span>
               </th>
@@ -203,6 +206,9 @@ const usd = (n: number) =>
     background: var(--orange-500);
     border-radius: var(--r-pill);
     padding: 2px 8px;
+  }
+  .compare__limited {
+    background: var(--teal-600);
   }
   .compare__group-level {
     grid-column: 2;
