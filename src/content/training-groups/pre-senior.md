@@ -1,6 +1,6 @@
 ---
 name: "Pre-Senior"
-ageRange: "11–14 yrs"
+ageRange: "11–16 yrs"
 groupSize: 27
 suggestedPractices: "4–6×/week"
 monthlyHours: 40.75
@@ -8,6 +8,9 @@ monthlyCost: 280
 costPerHour: 6.87
 commitmentLevel: "competitive"
 order: 5
+registration:
+  monthly: "https://momence.com/m/880907"
+  seasonal: "https://momence.com/m/903825"
 scheduleOptions:
   - slots:
       - { day: "Mon", time: "7:00–8:30 PM" }

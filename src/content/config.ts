@@ -39,14 +39,31 @@ const trainingGroups = defineCollection({
     costPerHour: z.number(), // USD, stored for display
     commitmentLevel: z.enum(['developmental', 'competitive', 'elite']),
     // Roster availability. `full` swaps the group's registration path for an
-    // email-first availability check; anything else renders as open.
-    status: z.enum(['open', 'full']).default('open'),
-    // Optional override for the availability callout copy shown when full.
+    // email-first availability check; `limited` keeps registration active but
+    // surfaces a register-soon callout; anything else renders as open.
+    status: z.enum(['open', 'limited', 'full']).default('open'),
+    // Optional override for the availability callout copy shown when
+    // full/limited.
     statusNote: z.string().optional(),
+    // Momence checkout links, rendered as Register — Monthly / Seasonal
+    // buttons (suppressed when the group is `full`).
+    registration: z
+      .object({
+        monthly: z.string().url(),
+        seasonal: z.string().url(),
+      })
+      .optional(),
     scheduleOptions: z
       .array(
         z.object({
           label: z.string().optional(), // "Option 1" when >1 option
+          // Per-option availability, shown on the option toggle. Distinct
+          // from group `status`: a group stays registrable while individual
+          // options fill up.
+          status: z.enum(['open', 'limited', 'full']).optional(),
+          // One-liner under the slots for the selected option,
+          // e.g. "Tons of availability".
+          statusNote: z.string().optional(),
           slots: z.array(
             z.object({
               day: z.string(),

@@ -13,6 +13,7 @@ import CTABand from '@components/sections/CTABand.astro';
 import TrackTabs from '@components/widgets/TrackTabs.astro';
 import TrainingGroupsTable from '@components/widgets/TrainingGroupsTable.astro';
 import TeamEvaluations from '@components/sections/TeamEvaluations.astro';
+import MembershipsAddOns from '@components/sections/MembershipsAddOns.astro';
 import StatBlock from '@components/ui/StatBlock.astro';
 import { site } from '@data/site';
 import {
@@ -67,6 +68,16 @@ const coachesForGroup = (slug: string) =>
 const availabilityHref = (name: string) =>
   `mailto:${site.contact.email}?subject=${encodeURIComponent(`${name} availability`)}`;
 
+// Compare-table chip: a group that's open overall but has full/limited
+// schedule options (Novice, Advanced) reads as limited at a glance.
+const effectiveStatus = (entry: GroupEntry) =>
+  entry.data.status === 'open' &&
+  entry.data.scheduleOptions.some(
+    (opt) => opt.status === 'full' || opt.status === 'limited',
+  )
+    ? 'limited'
+    : entry.data.status;
+
 const tracks = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
   name: entry.data.name,
@@ -74,6 +85,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
   bodyHtml: micromark(entry.body),
   status: entry.data.status,
   statusNote: entry.data.statusNote,
+  registration: entry.data.registration,
   availabilityHref: availabilityHref(entry.data.name),
   meta: [
     { label: 'Ages', value: entry.data.ageRange },
@@ -90,7 +102,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
 const compareRows = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
   name: entry.data.name,
-  status: entry.data.status,
+  status: effectiveStatus(entry),
   ageRange: entry.data.ageRange,
   groupSize: entry.data.groupSize,
   suggestedPractices: entry.data.suggestedPractices,
@@ -155,6 +167,8 @@ const compareRows = groups.map((entry: GroupEntry) => ({
     </section>
 
     <TeamEvaluations />
+
+    <MembershipsAddOns />
 
     <FAQAccordion surface="team" heading="Team FAQs" />
 
