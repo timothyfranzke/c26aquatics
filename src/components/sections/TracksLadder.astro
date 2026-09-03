@@ -32,7 +32,10 @@ const {
           <span class="track__body">
             <span class="track__pills">
               <span class="track__age">{t.age}</span>
-              {t.status === 'full' && <span class="track__full">Group full</span>}
+              {t.status === 'full' && <span class="track__status">Group full</span>}
+              {t.status === 'limited' && (
+                <span class="track__status track__status--limited">Limited spots</span>
+              )}
             </span>
             <span class="track__title">{t.title}</span>
             <span class="track__desc">{t.desc}</span>
@@ -137,7 +140,7 @@ const {
     border-radius: var(--r-pill);
     padding: 3px 10px;
   }
-  .track__full {
+  .track__status {
     font-family: var(--font-subhead);
     font-weight: var(--fw-semibold);
     text-transform: uppercase;
@@ -147,6 +150,9 @@ const {
     background: var(--orange-500);
     border-radius: var(--r-pill);
     padding: 3px 10px;
+  }
+  .track__status--limited {
+    background: var(--teal-600);
   }
   .track__title {
     font-family: var(--font-display);

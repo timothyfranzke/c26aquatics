@@ -11,8 +11,10 @@ export interface Track {
   desc: string;
   cta: string;
   href: string;
-  // Mirrors the group's `status` frontmatter; 'full' renders a marker.
-  status?: 'open' | 'full';
+  // Mirrors the group's effective availability on /team; 'limited' and 'full'
+  // each render a marker. Groups whose schedule options are a mix (some full,
+  // some open) read as 'limited' here — the per-option breakdown lives on /team.
+  status?: 'open' | 'limited' | 'full';
 }
 
 export const tracks: Track[] = [
@@ -31,7 +33,7 @@ export const tracks: Track[] = [
     desc: 'Learn to Train — the first stage of structured training and a full understanding of all four strokes.',
     cta: 'View group →',
     href: '/team#novice-age-group',
-    status: 'full',
+    status: 'limited',
   },
   {
     num: '03',
@@ -40,7 +42,7 @@ export const tracks: Track[] = [
     desc: 'Train to Improve — refined technique, IM development, and intentional performance work.',
     cta: 'View group →',
     href: '/team#advanced-age-group',
-    status: 'full',
+    status: 'limited',
   },
   {
     num: '04',
@@ -49,6 +51,7 @@ export const tracks: Track[] = [
     desc: 'Train to Compete — time standards, championship prep, and advancement into higher-level competition.',
     cta: 'View group →',
     href: '/team#junior-olympic',
+    status: 'limited',
   },
   {
     num: '05',
