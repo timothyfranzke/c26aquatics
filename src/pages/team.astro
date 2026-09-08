@@ -96,6 +96,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
     { label: 'Per hour', value: usd(entry.data.costPerHour) },
   ],
   scheduleOptions: entry.data.scheduleOptions,
+  sharedSchedule: entry.data.sharedSchedule,
   coaches: coachesForGroup(entry.slug),
 }));
 

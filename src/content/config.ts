@@ -73,6 +73,22 @@ const trainingGroups = defineCollection({
         }),
       )
       .min(1),
+    // Practices that sit outside the option split and are open to every
+    // option (Novice/Advanced Friday and Saturday sessions). Rendered as its
+    // own block under the option panels so the times stay visible whichever
+    // option is selected.
+    sharedSchedule: z
+      .object({
+        label: z.string(),
+        note: z.string().optional(),
+        slots: z.array(
+          z.object({
+            day: z.string(),
+            time: z.string(),
+          }),
+        ),
+      })
+      .optional(),
     prerequisites: z.array(z.string()).default([]),
     order: z.number(),
   }),
