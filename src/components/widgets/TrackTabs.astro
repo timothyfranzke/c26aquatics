@@ -51,6 +51,13 @@ interface Track {
   bodyHtml: string;
   meta?: MetaItem[];
   scheduleOptions?: ScheduleOption[];
+  // Practices open to every option — rendered once under the option panels
+  // so the times stay on screen whichever option is selected.
+  sharedSchedule?: {
+    label: string;
+    note?: string;
+    slots: ScheduleSlot[];
+  };
   coaches?: TrackCoach[];
   // 'full' renders a pill on the tab and an email-first availability callout
   // in the panel; 'limited' renders a pill and a register-soon callout while
@@ -61,6 +68,17 @@ interface Track {
   // Momence checkout links — hidden when the group is 'full'.
   registration?: { monthly: string; seasonal: string };
 }
+
+// An option whose slots are exactly the shared sessions (Novice/Advanced
+// Option 3 = Friday and Saturday) skips its own slot list — the shared block
+// below the panels already lists those times.
+const isSharedOnly = (opt: ScheduleOption, shared?: { slots: ScheduleSlot[] }) =>
+  !!shared &&
+  opt.slots.length === shared.slots.length &&
+  opt.slots.every(
+    (slot, i) =>
+      slot.day === shared.slots[i].day && slot.time === shared.slots[i].time,
+  );
 
 interface Props {
   id: string;
@@ -213,19 +231,40 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                     data-sched-panel={oi}
                     hidden={oi !== 0}
                   >
-                    <ul class="tracks__slots">
-                      {opt.slots.map((slot) => (
-                        <li class="tracks__slot">
-                          <span class="tracks__slot-day">{slot.day}</span>
-                          <span class="tracks__slot-time">{slot.time}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {!isSharedOnly(opt, track.sharedSchedule) && (
+                      <ul class="tracks__slots">
+                        {opt.slots.map((slot) => (
+                          <li class="tracks__slot">
+                            <span class="tracks__slot-day">{slot.day}</span>
+                            <span class="tracks__slot-time">{slot.time}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     {opt.statusNote && (
                       <p class="tracks__sched-note">{opt.statusNote}</p>
                     )}
                   </div>
                 ))}
+                {track.sharedSchedule && (
+                  <div class="tracks__shared">
+                    <p class="tracks__shared-label">
+                      {track.sharedSchedule.label}
+                      <span class="tracks__shared-pill">All options</span>
+                    </p>
+                    <ul class="tracks__slots">
+                      {track.sharedSchedule.slots.map((slot) => (
+                        <li class="tracks__slot tracks__slot--shared">
+                          <span class="tracks__slot-day">{slot.day}</span>
+                          <span class="tracks__slot-time">{slot.time}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {track.sharedSchedule.note && (
+                      <p class="tracks__shared-note">{track.sharedSchedule.note}</p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <div class="tracks__body" set:html={track.bodyHtml}></div>
@@ -651,6 +690,50 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
     font-size: 13px;
     font-weight: var(--fw-medium);
     color: var(--teal-700);
+  }
+  /* Open to every option, so it sits below the panels as its own block
+     rather than inside any one option's slot list. */
+  .tracks__shared {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+    padding: var(--space-4);
+    background: var(--teal-100);
+    border: 1px solid var(--teal-600);
+    border-left-width: 4px;
+    border-radius: var(--r-md);
+  }
+  .tracks__shared-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+  }
+  .tracks__shared-pill {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--teal-600);
+    border-radius: var(--r-pill);
+    padding: 2px 8px;
+  }
+  .tracks__slot--shared {
+    background: var(--white);
+    border-color: var(--teal-200);
+  }
+  .tracks__shared-note {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-body);
   }
   .tracks__slots {
     list-style: none;
