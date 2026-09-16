@@ -12,7 +12,9 @@ highlights:
   - "Swam for the Kansas City Blazers & Arizona State Club Swim"
   - "Specialist in 100/200 backstroke, 200 IM & sprint free"
   - "B.S. in Biological Sciences, Arizona State University"
-usaSwimmingMember: false
+credentials:
+  - "USA Swimming Registered Coach"
+usaSwimmingMember: true
 safeSportCertified: false
 order: 3
 ---
