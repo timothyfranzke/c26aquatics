@@ -2,7 +2,7 @@
 /**
  * TeamEvaluations — the evaluations & registration section on /team.
  * Team structure, evaluation dates + per-group standards, required equipment
- * + preferred products, and the proposed meet schedule. Data lives in
+ * + preferred products, and the season meet schedule. Data lives in
  * src/data/evaluations.ts and src/data/meetSchedule.ts.
  */
 import Button from '@components/ui/Button.astro';
@@ -15,7 +15,7 @@ import {
   equipmentNote,
   evaluationStandards,
 } from '@data/evaluations';
-import { meetSchedule } from '@data/meetSchedule';
+import { meetSchedule, meetSeason } from '@data/meetSchedule';
 ---
 <section id="join" class="teameval" aria-labelledby="teameval-title">
   <div class="container">
@@ -99,16 +99,21 @@ import { meetSchedule } from '@data/meetSchedule';
 
     <!-- Meet schedule -->
     <div class="teameval__block">
-      <h3 class="teameval__block-title">Proposed meet schedule</h3>
+      <h3 class="teameval__block-title">Meet schedule</h3>
+      <p class="teameval__block-sub">{meetSeason}</p>
       <ol class="teameval__schedule">
         {meetSchedule.map((m) => (
           <li class="sched">
-            <span class="sched__period">{m.period}</span>
-            <span class="sched__meets">{m.meets.join(' · ')}</span>
+            <span class="sched__period">{m.dates}</span>
+            <span class="sched__meet">
+              <span class="sched__name">{m.name}</span>
+              <span class="sched__groups">{m.groups}</span>
+            </span>
+            <span class="sched__location">{m.location}</span>
           </li>
         ))}
       </ol>
-      <p class="teameval__note">Proposed schedule — meets and dates may shift as the season firms up.</p>
+      <p class="teameval__note">Session times are TBA — entry details and timelines go out to families ahead of each meet. Championship meets require qualifying times.</p>
     </div>
 
     <!-- Registration CTA -->
@@ -375,12 +380,41 @@ import { meetSchedule } from '@data/meetSchedule';
     border-radius: var(--r-md);
     overflow: hidden;
   }
+  .teameval__block-sub {
+    margin: calc(-1 * var(--space-2)) 0 var(--space-4);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+  }
   .sched {
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 200px 1fr 170px;
     gap: var(--space-4);
+    align-items: start;
     padding: var(--space-3) var(--space-5);
     background: var(--surface);
+  }
+  .sched__meet {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .sched__name {
+    font-weight: var(--fw-semibold);
+    color: var(--navy-700);
+  }
+  .sched__groups {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+  .sched__location {
+    font-size: 14px;
+    color: var(--text-body);
   }
   .sched__period {
     font-family: var(--font-subhead);
@@ -389,11 +423,6 @@ import { meetSchedule } from '@data/meetSchedule';
     letter-spacing: 0.03em;
     font-size: 13px;
     color: var(--navy-700);
-  }
-  .sched__meets {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text-body);
   }
 
   .teameval__cta {
@@ -406,5 +435,6 @@ import { meetSchedule } from '@data/meetSchedule';
     .teameval__equip { grid-template-columns: 1fr; }
     .sched { grid-template-columns: 1fr; gap: var(--space-1); }
     .sched__period { font-size: 12px; }
+    .sched__location { font-size: 13px; }
   }
 </style>
