@@ -1,6 +1,7 @@
 # USA Swimming references — removal log & restore plan
 
 **Date removed:** 2026-07-17 (commit `a99fee6`)
+**Restored:** 2026-09-16 — club license official per Robbie's "Time to turn it on!" email; `a99fee6` reverted cleanly.
 **Why:** USA Swimming called the club and asked that all affiliation claims come off
 the website until the club license is official (expected ~2 weeks, early August 2026).
 Another local club had complained. Leaving the claims up risked a penalty.
