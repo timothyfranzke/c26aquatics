@@ -1,3 +1,5 @@
+import { site } from './site';
+
 export interface NavItem {
   label: string;
   href: string;
@@ -12,6 +14,7 @@ export const primaryNav: readonly NavItem[] = [
   { label: 'Coaches', href: '/coaches' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Team Store', href: site.store, external: true },
 ] as const;
 
 export const footerLinks: readonly NavItem[] = [
@@ -22,6 +25,7 @@ export const footerLinks: readonly NavItem[] = [
   { label: 'Coaches', href: '/coaches' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Team Store', href: site.store, external: true },
 ] as const;
 
 // Legal pages live on the C26 Hub site (same LLC) — no local routes.

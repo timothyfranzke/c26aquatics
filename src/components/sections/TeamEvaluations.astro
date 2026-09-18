@@ -95,6 +95,12 @@ import { meetSchedule, meetSeason } from '@data/meetSchedule';
         </tbody>
       </table>
       <p class="teameval__note">{equipmentNote}</p>
+      <p class="teameval__store">
+        Team suits, caps, and gear are in our official store at Elsmore Swim.
+        <Button href={site.store} variant="outline" size="sm" external>
+          Shop the team store
+        </Button>
+      </p>
     </div>
 
     <!-- Meet schedule -->
@@ -379,6 +385,15 @@ import { meetSchedule, meetSeason } from '@data/meetSchedule';
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     overflow: hidden;
+  }
+  .teameval__store {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    margin: var(--space-4) 0 0;
+    font-size: 15px;
+    color: var(--text-body);
   }
   .teameval__block-sub {
     margin: calc(-1 * var(--space-2)) 0 var(--space-4);
