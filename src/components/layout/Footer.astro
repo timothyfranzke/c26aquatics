@@ -40,7 +40,16 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
       <h2 class="c26-footer__heading">Site</h2>
       <ul class="c26-footer__list">
         {footerLinks.map((link) => (
-          <li><a href={link.href} class="c26-footer__link">{link.label}</a></li>
+          <li>
+            <a
+              href={link.href}
+              class="c26-footer__link"
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
         ))}
       </ul>
     </div>

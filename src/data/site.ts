@@ -54,6 +54,10 @@ export const site = {
     team: 'https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138',
   },
 
+  // Elsmore Swim team store — nav, footer, and the /team equipment block
+  // all link here (Robbie, Sep 18 2026).
+  store: 'https://elsmoreswim.com/collections/c26-aquatics',
+
   // GA4 — set via env var or hardcode once provisioned
   // TODO: replace with real measurement ID
   ga4MeasurementId: 'G-XXXXXXXXXX',
